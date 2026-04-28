@@ -30,20 +30,16 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 
 # ── FIREBASE SETUP ─────────────────────────
 
-FIREBASE_KEY = "serviceAccountKey.json"
-db = None
+import json
+import os
 
-try:
-    if os.path.exists(FIREBASE_KEY):
-        cred = credentials.Certificate(FIREBASE_KEY)
-        if not firebase_admin._apps:
-            firebase_admin.initialize_app(cred)
-        db = firestore.client()
-        print("✅ Firebase connected")
-    else:
-        print("❌ Firebase key not found")
-except Exception as e:
-    print("🔥 Firebase init error:", e)
+if os.getenv("FIREBASE_KEY"):
+    firebase_data = json.loads(os.getenv("FIREBASE_KEY"))
+    cred = credentials.Certificate(firebase_data)
+    firebase_admin.initialize_app(cred)
+    db = firestore.client()
+else:
+    print("❌ Firebase key not found")
     db = None
 
 # ── MODEL ─────────────────────────
