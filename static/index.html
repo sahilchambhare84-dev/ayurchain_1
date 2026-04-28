@@ -1,0 +1,157 @@
+<script>
+lucide.createIcons();
+
+const API_BASE = "http://10.13.22.92:8000";
+let products = [];
+let currentUser = JSON.parse(localStorage.getItem('ayurchain_user') || 'null');
+
+// NAVIGATION
+function showPage(pageId) {
+    if (pageId === 'dashboard' && !currentUser) pageId = 'login';
+
+    document.querySelectorAll('.page-content').forEach(p => p.classList.remove('active'));
+    const target = document.getElementById(`page-${pageId}`);
+    if (target) target.classList.add('active');
+
+    updateNavUI();
+    window.scrollTo(0, 0);
+    if (pageId === 'dashboard') renderDashboard();
+}
+
+// NAV UI
+function updateNavUI() {
+    const profile = document.getElementById('userProfile');
+    const regBtn = document.getElementById('navRegisterBtn');
+    const nameDisp = document.getElementById('userNameDisplay');
+
+    if (currentUser) {
+        profile?.classList.replace('hidden', 'flex');
+        regBtn?.classList.add('hidden');
+        if (nameDisp) nameDisp.innerText = currentUser.name;
+    } else {
+        profile?.classList.replace('flex', 'hidden');
+        regBtn?.classList.remove('hidden');
+    }
+}
+
+// LOGIN
+document.getElementById('loginForm').onsubmit = (e) => {
+    e.preventDefault();
+    const name = document.getElementById('loginName').value;
+    const id = document.getElementById('loginId').value;
+
+    currentUser = { name, id };
+    localStorage.setItem('ayurchain_user', JSON.stringify(currentUser));
+    showPage('dashboard');
+};
+
+function logout() {
+    currentUser = null;
+    localStorage.removeItem('ayurchain_user');
+    showPage('home');
+}
+
+// ADD PRODUCT
+document.getElementById('productForm').onsubmit = async (e) => {
+    e.preventDefault();
+
+    const data = new FormData(e.target);
+
+    const payload = {
+        name: data.get('name'),
+        description: data.get('description'),
+        producer_name: currentUser.name,
+        producer_id: currentUser.id,
+        farmer_name: data.get('farmerName'),
+        location: data.get('location'),
+        harvest_date: data.get('harvestDate'),
+        status: "Verified"
+    };
+
+    try {
+        const response = await fetch(`${API_BASE}/add-product`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+
+        const res = await response.json();
+
+        products.unshift({
+            id: res.product_id,
+            name: payload.name,
+            farmer_name: payload.farmer_name,
+            harvest_date: payload.harvest_date,
+            qr_url: res.qr_code
+        });
+
+        renderDashboard();
+        e.target.reset();
+
+        viewQR(res.product_id, payload.name, res.qr_code);
+
+    } catch (err) {
+        alert("Error adding product");
+        console.error(err);
+    }
+};
+
+// DASHBOARD
+function renderDashboard() {
+    const grid = document.getElementById('productGrid');
+    if (!grid) return;
+
+    if (products.length === 0) {
+        grid.innerHTML = `<div class="p-10 text-center text-neutral-500">No products yet</div>`;
+        return;
+    }
+
+    grid.innerHTML = products.map(p => `
+        <div class="p-6 glass rounded-xl">
+            <h3 class="text-xl font-bold">${p.name}</h3>
+            <p class="text-xs">${p.id}</p>
+            <p>${p.farmer_name}</p>
+            <p>${p.harvest_date}</p>
+
+            <button onclick="viewQR('${p.id}','${p.name}','${p.qr_url}')">QR</button>
+            <button onclick="verifyItem('${p.id}')">Verify</button>
+        </div>
+    `).join('');
+}
+
+// VIEW QR
+function viewQR(id, name, url) {
+    document.getElementById('qrName').innerText = name;
+    document.getElementById('qrId').innerText = id;
+
+    const qr = document.getElementById('qrcode');
+    qr.innerHTML = `<img src="${API_BASE}${url}" class="w-48">`;
+
+    document.getElementById('qrModal').classList.remove('hidden');
+}
+
+// VERIFY
+async function verifyItem(id) {
+    try {
+        const res = await fetch(`${API_BASE}/product/${id}`);
+        const data = await res.json();
+
+        alert("Product Verified: " + data.name);
+
+    } catch {
+        alert("Not found");
+    }
+}
+
+// SCANNER FIX
+function scanSuccess(productId) {
+    if (productId) {
+        closeScanner();
+        verifyItem(productId);
+        return;
+    }
+}
+
+// INIT
+updateNavUI();
+</script>
