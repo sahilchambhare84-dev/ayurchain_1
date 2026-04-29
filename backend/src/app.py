@@ -9,8 +9,14 @@ from fastapi.responses import FileResponse
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import Optional
+from fastapi.staticfiles import StaticFiles
 
 app = FastAPI(title="AyurChain Producer API")
+
+BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../"))
+STATIC_DIR = os.path.join(BASE_DIR, "static")
+
+app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
 
 app.add_middleware(
     CORSMiddleware,
@@ -73,7 +79,7 @@ def add_product(product: Product):
 
         # QR content → link to product API
         BASE_URL = "https://ayurchain-1.onrender.com"
-        qr_data = f"{BASE_URL}/product/{product_id}"
+        qr_data = f"{BASE_URL}/static/index.html?id={product_id}"
 
         qr_path = os.path.join(QR_DIR, f"{product_id}.png")
         qrcode.make(qr_data).save(qr_path)
