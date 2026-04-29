@@ -62,10 +62,6 @@
             text-decoration: none;
         }
 
-        .logo span {
-            color: var(--primary);
-        }
-
         .container {
             max-width: 800px;
             margin: 2rem auto;
@@ -177,6 +173,7 @@
         .info-item span {
             font-weight: 500;
             color: white;
+            display: block;
         }
 
         .description-text {
@@ -226,16 +223,6 @@
             margin-bottom: 0.25rem;
         }
 
-        .timeline-title {
-            font-weight: 600;
-            margin-bottom: 0.25rem;
-        }
-
-        .timeline-desc {
-            font-size: 0.85rem;
-            color: var(--text-muted);
-        }
-
         .btn-outline {
             background: transparent;
             color: white;
@@ -259,26 +246,8 @@
             background: rgba(255, 255, 255, 0.05);
         }
 
-        .animate-spin {
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-
-        .image-gallery {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-            gap: 1rem;
-            margin-top: 1rem;
-        }
-
-        @media (max-width: 600px) {
-            h1 { font-size: 1.75rem; }
-            .card { padding: 1.5rem; }
-        }
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        .animate-spin { animation: spin 1s linear infinite; }
     </style>
 </head>
 <body>
@@ -318,7 +287,6 @@
                 <p class="product-id">ID: <span id="display-id">---</span></p>
             </div>
 
-            <!-- Herb Details -->
             <section class="card">
                 <div class="card-header">
                     <div class="card-icon"><i data-lucide="leaf"></i></div>
@@ -340,7 +308,6 @@
                 </div>
             </section>
 
-            <!-- Farmer Details -->
             <section class="card">
                 <div class="card-header">
                     <div class="card-icon"><i data-lucide="user"></i></div>
@@ -362,7 +329,6 @@
                 </div>
             </section>
 
-            <!-- Supply Chain -->
             <section class="card">
                 <div class="card-header">
                     <div class="card-icon"><i data-lucide="calendar"></i></div>
@@ -375,21 +341,10 @@
                         <div class="timeline-desc">Herb harvested and initial quality verification completed at source.</div>
                     </div>
                     <div class="timeline-item">
-                        <div class="timeline-date">Recently</div>
+                        <div class="timeline-date">Verified Recently</div>
                         <div class="timeline-title">Blockchain Registration</div>
                         <div class="timeline-desc">Digital twin created and anchored to immutable ledger.</div>
                     </div>
-                </div>
-            </section>
-
-            <!-- Photos -->
-            <section class="card">
-                <div class="card-header">
-                    <div class="card-icon"><i data-lucide="image"></i></div>
-                    <h2>Visual Evidence</h2>
-                </div>
-                <div class="image-gallery" id="gallery">
-                    <!-- Images will be injected here -->
                 </div>
             </section>
 
@@ -412,22 +367,19 @@
             }
 
             try {
-                // Fixed API endpoint as per requirements
-                const response = await fetch(`https://ayurchain-1.onrender.com/product/${productId}`);
-                
-                if (!response.ok) {
-                    throw new Error("Product not found");
-                }
-
+                // FIXED ENDPOINT: Using /api/products/ instead of /product/
+                const response = await fetch(`/api/products/${productId}`);
                 const data = await response.json();
                 
-                // Handle both direct and nested structure
-                const product = data.product || data;
+                if (!response.ok || (data.success === false)) {
+                    throw new Error(data.message || "Product not found");
+                }
 
+                const product = data.product || data;
                 displayProduct(productId, product);
             } catch (err) {
                 console.error("Fetch error:", err);
-                showError("Verification Failed", "The requested product could not be found in our secure registry.");
+                showError("Verification Failed", err.message);
             }
         }
 
@@ -436,32 +388,16 @@
             document.getElementById('product-content').style.display = 'block';
 
             document.getElementById('display-id').textContent = id;
-            document.getElementById('herb-name').textContent = p.name || 'Unknown Herb';
-            document.getElementById('herb-description').textContent = p.description || 'No description provided.';
+            document.getElementById('herb-name').textContent = p.name || '---';
+            document.getElementById('herb-description').textContent = p.description || '---';
             document.getElementById('product-status').textContent = p.status || 'Verified';
             
-            document.getElementById('producer-name').textContent = p.producer_name || 'N/A';
-            document.getElementById('farmer-name').textContent = p.farmer_name || 'N/A';
-            document.getElementById('producer-location').textContent = p.location || 'N/A';
+            document.getElementById('producer-name').textContent = p.producer_name || '---';
+            document.getElementById('farmer-name').textContent = p.farmer_name || '---';
+            document.getElementById('producer-location').textContent = p.location || '---';
             
             if (p.harvest_date) {
                 document.getElementById('harvest-date').textContent = p.harvest_date;
-            }
-
-            // Handle Images
-            const gallery = document.getElementById('gallery');
-            if (p.images && p.images.length > 0) {
-                gallery.innerHTML = '';
-                p.images.forEach(imgUrl => {
-                    const img = document.createElement('img');
-                    img.src = imgUrl;
-                    img.style.width = '100%';
-                    img.style.borderRadius = '12px';
-                    img.style.border = '1px solid var(--card-border)';
-                    gallery.appendChild(img);
-                });
-            } else {
-                gallery.innerHTML = '<p style="color: var(--text-muted); font-size: 0.8rem;">No images uploaded for this batch.</p>';
             }
 
             lucide.createIcons();
@@ -471,10 +407,8 @@
             document.getElementById('loading').style.display = 'none';
             document.getElementById('product-content').style.display = 'none';
             document.getElementById('error').style.display = 'block';
-            
             document.getElementById('error-title').textContent = title;
             document.getElementById('error-msg').textContent = msg;
-            
             lucide.createIcons();
         }
 
