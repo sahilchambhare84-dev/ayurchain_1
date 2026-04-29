@@ -80,14 +80,18 @@ def add_product(product: Product):
     BASE_URL = "https://ayurchain-1.onrender.com"
     qr_data = f"{BASE_URL}/static/index.html?id={product_id}"
 
-    qr_img = qrcode.make(qr_data)
-    qr_path = os.path.join(QR_DIR, f"{product_id}.png")
-    qr_img.save(qr_path)
+    try:
+        qr_img = qrcode.make(qr_data)
+        qr_path = os.path.join(QR_DIR, f"{product_id}.png")
+        qr_img.save(qr_path)
+    except Exception as e:
+        print("QR generation error:", e)
+        qr_path = None
 
     return {
         "message": "Product added successfully",
         "product_id": product_id,
-        "qr_code": f"/static/qrcodes/{product_id}.png"
+        "qr_code": f"/static/qrcodes/{product_id}.png" if qr_path else None
     }
 
 # ── GET PRODUCT ─────────────────────────
