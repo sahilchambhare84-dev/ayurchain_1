@@ -5,13 +5,15 @@ import qrcode
 import firebase_admin
 from firebase_admin import credentials, firestore
 from fastapi import FastAPI, HTTPException
+from fastapi.responses import FileResponse, RedirectResponse
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
-from fastapi.responses import FileResponse
 from pydantic import BaseModel
 from typing import Optional
+from dotenv import load_dotenv
+import uvicorn
 
-# ── INITIALIZATION ─────────────────────────
+load_dotenv()
 
 app = FastAPI(title="AyurChain Producer API")
 
@@ -23,39 +25,35 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# ── STATIC + QR DIRECTORY (FIXED FOR RENDER) ─────────────────────────
-
-# Use temp folder (safe on Render)
+# ───────── QR STORAGE (works on Render) ─────────
 QR_DIR = os.path.join(tempfile.gettempdir(), "qrcodes")
 os.makedirs(QR_DIR, exist_ok=True)
 
-# Serve frontend files
-BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../"))
-STATIC_DIR = os.path.join(BASE_DIR, "static")
+# ───────── FIREBASE ─────────
+db = None
+firebase_key = os.getenv("FIREBASE_KEY")
+service_account_path = os.path.join(os.path.dirname(__file__), "..", "..", "serviceAccountKey.json")
 
-app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
+try:
+    if firebase_key:
+        cred = credentials.Certificate(json.loads(firebase_key))
+    elif os.path.exists(service_account_path):
+        cred = credentials.Certificate(service_account_path)
+    else:
+        cred = None
+        print("FIREBASE_KEY not set and serviceAccountKey.json not found")
 
-# ── FIREBASE SETUP ─────────────────────────
+    if cred:
+        try:
+            firebase_admin.get_app()
+        except ValueError:
+            firebase_admin.initialize_app(cred)
+        db = firestore.client()
+        print("Firebase connected")
+except Exception as e:
+    print("Firebase error:", e)
 
-SERVICE_ACCOUNT_PATH = "serviceAccountKey.json"
-
-if os.path.exists(SERVICE_ACCOUNT_PATH):
-    cred = credentials.Certificate(SERVICE_ACCOUNT_PATH)
-    firebase_admin.initialize_app(cred)
-    db = firestore.client()
-    print("Firebase initialized from file")
-elif os.getenv("FIREBASE_KEY"):
-    firebase_data = json.loads(os.getenv("FIREBASE_KEY"))
-    cred = credentials.Certificate(firebase_data)
-    firebase_admin.initialize_app(cred)
-    db = firestore.client()
-    print("Firebase initialized from environment variable")
-else:
-    print("Firebase not configured")
-    db = None
-
-# ── MODEL ─────────────────────────
-
+# ───────── MODEL ─────────
 class Product(BaseModel):
     name: str
     description: Optional[str] = ""
@@ -66,95 +64,85 @@ class Product(BaseModel):
     harvest_date: Optional[str] = ""
     status: Optional[str] = "Verified"
 
-# ── ADD PRODUCT ─────────────────────────
+# ───────── API STATUS ─────────
+@app.get("/")
+def read_root():
+    return {"message": "AyurChain API is running", "status": "operational"}
 
+# ───────── ADD PRODUCT ─────────
 @app.post("/add-product")
 def add_product(product: Product):
     if not db:
-        raise HTTPException(status_code=500, detail="Firestore not initialized")
+        raise HTTPException(status_code=500, detail="Firestore not initialized. Check your terminal for Firebase errors.")
 
-    data = product.model_dump()
+    try:
+        # Save product (Compatibility for Pydantic v1 and v2)
+        data = product.model_dump() if hasattr(product, "model_dump") else product.dict()
+        
+        doc_ref = db.collection("products").document()
+        product_id = doc_ref.id
+        doc_ref.set(data)
 
-    # Create Firestore document
-    doc_ref = db.collection("products").document()
-    product_id = doc_ref.id
-    doc_ref.set(data)
+        # Create QR
+        qr_data = product_id 
+        qr_path = os.path.join(QR_DIR, f"{product_id}.png")
+        qrcode.make(qr_data).save(qr_path)
 
-    # Create QR link
-    BASE_URL = "https://ayurchain-1.onrender.com"
-    qr_data = f"{BASE_URL}/static/index.html?id={product_id}"
+        return {
+            "message": "Product added successfully",
+            "product_id": product_id,
+            "qr_code": f"/qr/{product_id}"
+        }
+    except Exception as e:
+        print(f"❌ ERROR SAVING PRODUCT: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
 
-    # Generate QR
-    qr_img = qrcode.make(qr_data)
-    qr_path = os.path.join(QR_DIR, f"{product_id}.png")
-    qr_img.save(qr_path)
-
-    print("QR saved at:", qr_path)
-
-    return {
-        "message": "Product added successfully",
-        "product_id": product_id,
-        "qr_code": f"/qr/{product_id}"
-    }
-
-# ── GET PRODUCT ─────────────────────────
-
+# ───────── GET PRODUCT ─────────
 @app.get("/product/{product_id}")
 def get_product(product_id: str):
     if not db:
         raise HTTPException(status_code=500, detail="Firestore not initialized")
 
     doc = db.collection("products").document(product_id).get()
-
     if not doc.exists:
         raise HTTPException(status_code=404, detail="Product not found")
 
     return doc.to_dict()
 
-# ── UPDATE PRODUCT ─────────────────────────
-
-@app.put("/product/{product_id}")
-def update_product(product_id: str, product: Product):
+# ───────── LIST PRODUCTS ─────────
+@app.get("/products")
+def list_products(producer_id: Optional[str] = None):
     if not db:
         raise HTTPException(status_code=500, detail="Firestore not initialized")
 
-    doc_ref = db.collection("products").document(product_id)
+    try:
+        query = db.collection("products")
+        if producer_id:
+            query = query.where("producer_id", "==", producer_id)
+        
+        docs = query.stream()
+        return [{"id": doc.id, **doc.to_dict()} for doc in docs]
+    except Exception as e:
+        print(f"❌ ERROR LISTING PRODUCTS: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
 
-    if not doc_ref.get().exists:
-        raise HTTPException(status_code=404, detail="Product not found")
-
-    doc_ref.update(product.model_dump())
-
-    return {"message": "Product updated successfully"}
-
-# ── DELETE PRODUCT ─────────────────────────
-
-@app.delete("/product/{product_id}")
-def delete_product(product_id: str):
-    if not db:
-        raise HTTPException(status_code=500, detail="Firestore not initialized")
-
-    db.collection("products").document(product_id).delete()
-
-    qr_path = os.path.join(QR_DIR, f"{product_id}.png")
-    if os.path.exists(qr_path):
-        os.remove(qr_path)
-
-    return {"message": "Product deleted successfully"}
-
-# ── GET QR ─────────────────────────
-
+# ───────── GET QR ─────────
 @app.get("/qr/{product_id}")
 def get_qr(product_id: str):
+    if not db:
+        raise HTTPException(status_code=500, detail="Firestore not initialized")
+
     qr_path = os.path.join(QR_DIR, f"{product_id}.png")
 
     if not os.path.exists(qr_path):
-        raise HTTPException(status_code=404, detail="QR not found")
+        # Re-generate if product exists in DB
+        doc = db.collection("products").document(product_id).get()
+        if doc.exists:
+            qrcode.make(product_id).save(qr_path)
+        else:
+            raise HTTPException(status_code=404, detail="Product not found")
 
     return FileResponse(qr_path)
 
-# ── ROOT ─────────────────────────
-
-@app.get("/")
-def root():
-    return FileResponse("static/index.html")
+if __name__ == "__main__":
+    uvicorn.run(app, host="0.0.0.0", port=8000)

@@ -1,25 +1,33 @@
-# AyurChain 2.0 🌿
+# AyurChain 🌿
 
-A secure, transparent herbal supply chain platform built with **Python**, **HTML**, and **C**.
+A secure, transparent herbal supply chain platform. Now unified into a single, easy-to-run application.
 
-## 🚀 Quick Preview
-The project is currently running on localhost.
-- **Link**: [http://localhost:8000](http://localhost:8000)
+## 🚀 One-Click Start
+1.  **Install dependencies**:
+    ```bash
+    pip install -r requirements.txt
+    ```
+2.  **Run the application**:
+    ```bash
+    python backend/src/app.py
+    ```
+3.  **Access the Portal**:
+    Open [http://localhost:8000](http://localhost:8000) in your browser.
+
+## ✨ Features
+- **Unified Backend**: FastAPI now serves both the API and the Frontend.
+- **Smart Verification**: Real-time QR scanning with cryptographic validation.
+- **Persistent Inventory**: Products are stored in Firestore and automatically re-synced.
+- **Auto-QR**: QR codes are dynamically generated and re-generated as needed.
 
 ## 📸 QR Camera Scanning
-AyurChain now supports real-time verification using your device's camera.
-- **How to use**: Click "Scan Product QR" on the homepage and grant camera permissions.
-- **Security Note**: Browser security requires **HTTPS** or **localhost** for camera access. If you are deploying this, ensure you use an SSL certificate.
+AyurChain supports real-time verification using your device's camera.
+- **Local**: Works automatically on `localhost`.
+- **Production**: Requires **HTTPS** for camera access due to browser security policies.
 
-## 🏗️ Architecture
-- **Frontend SPA (`index.html`)**: A complete, high-fidelity experience using Tailwind CSS, Lucide Icons, and jsQR. Handles all logic, storage (localStorage), and real-time scanning.
-- **Backend API (`app.py`)**: A FastAPI implementation for server-side persistence and integration.
-- **Native Logic (`validator.c`)**: A C utility for high-performance product ID validation.
-
-## 🛠️ How to Run
-1. **Frontend (Recommended)**: Open `index.html` or run the provided preview server: `npx serve`.
-2. **Python Backend**: `pip install -r requirements.txt` and then `python app.py`.
-3. **C Utility**: `gcc validator.c -o validator`.
+## 🛠️ Configuration
+- **Firebase**: The app uses `serviceAccountKey.json` in the root for Firestore.
+- **Environment**: Use a `.env` file for `FIREBASE_KEY` if deploying to the cloud (e.g., Render/Heroku).
 
 ---
 © 2026 AyurChain - Transparency for the Herbal World.
