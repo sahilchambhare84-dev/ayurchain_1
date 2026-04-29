@@ -439,6 +439,10 @@
                 <span id="scan-error-msg">Camera access denied or invalid QR.</span>
             </div>
 
+            <button id="switch-camera-btn" class="btn-outline" style="margin-top: 1rem; width: 100%; justify-content: center; display: none;" onclick="switchCamera()">
+                <i data-lucide="refresh-cw" style="width: 18px;"></i> Switch Camera
+            </button>
+
             <button class="btn-outline" style="margin-top: 2rem; width: 100%; justify-content: center;" onclick="navigateTo('home')">
                 <i data-lucide="chevron-left" style="width: 18px;"></i> Back to Home
             </button>
@@ -556,13 +560,17 @@
         // Initialize Icons
         lucide.createIcons();
 
-        let html5QrcodeScanner = null;
+        let html5QrCode = null;
+        let cameras = [];
+        let currentCameraIndex = 0;
 
         // Navigation Logic
         function navigateTo(sectionId) {
             // Stop scanner if leaving scan section
-            if (sectionId !== 'scan' && html5QrcodeScanner) {
-                html5QrcodeScanner.clear().catch(err => console.error("Failed to clear scanner", err));
+            if (sectionId !== 'scan' && html5QrCode) {
+                html5QrCode.stop().then(() => {
+                    console.log("Scanner stopped");
+                }).catch(err => console.error("Failed to stop scanner", err));
             }
 
             // Hide all sections
@@ -575,50 +583,99 @@
 
             // Initialize scanner if entering scan section
             if (sectionId === 'scan') {
-                startScanner();
+                initScanner();
             }
         }
 
-        function startScanner() {
+        async function initScanner() {
+            try {
+                const devices = await Html5Qrcode.getCameras();
+                if (devices && devices.length > 0) {
+                    cameras = devices;
+                    
+                    // Prefer back camera
+                    const backCam = devices.find(d => d.label.toLowerCase().includes("back") || d.label.toLowerCase().includes("environment"));
+                    currentCameraIndex = backCam ? devices.indexOf(backCam) : 0;
+                    
+                    // Show switch button if multiple cameras
+                    if (cameras.length > 1) {
+                        document.getElementById('switch-camera-btn').style.display = 'flex';
+                    }
+                    
+                    startScanner(cameras[currentCameraIndex].id);
+                } else {
+                    showScanError("No cameras found.");
+                }
+            } catch (err) {
+                console.error("Error getting cameras", err);
+                showScanError("Camera access denied.");
+            }
+        }
+
+        function startScanner(cameraId) {
+            if (html5QrCode) {
+                html5QrCode.clear();
+            }
+            
+            html5QrCode = new Html5Qrcode("reader");
+            
             const config = { 
                 fps: 10, 
                 qrbox: { width: 250, height: 250 },
                 aspectRatio: 1.0
             };
 
-            html5QrcodeScanner = new Html5QrcodeScanner("reader", config, /* verbose= */ false);
+            html5QrCode.start(
+                cameraId, 
+                config, 
+                onScanSuccess, 
+                onScanFailure
+            ).catch(err => {
+                console.error("Failed to start scanner", err);
+                showScanError("Failed to start camera.");
+            });
             
-            html5QrcodeScanner.render(onScanSuccess, onScanFailure);
-            
-            // Handle error message visibility
             document.getElementById('scan-error').style.display = 'none';
+        }
+
+        async function switchCamera() {
+            if (html5QrCode && cameras.length > 1) {
+                try {
+                    await html5QrCode.stop();
+                    currentCameraIndex = (currentCameraIndex + 1) % cameras.length;
+                    startScanner(cameras[currentCameraIndex].id);
+                } catch (err) {
+                    console.error("Error switching camera", err);
+                }
+            }
         }
 
         function onScanSuccess(decodedText, decodedResult) {
             console.log("Scanned Result:", decodedText);
             
-            // 1. If it's a full URL (possibly from an old QR or external source)
-            if (decodedText.startsWith('http')) {
-                html5QrcodeScanner.clear();
-                window.location.href = decodedText;
-                return;
-            }
+            if (html5QrCode) {
+                html5QrCode.stop().then(() => {
+                    // 1. If it's a full URL
+                    if (decodedText.startsWith('http')) {
+                        window.location.href = decodedText;
+                        return;
+                    }
 
-            // 2. If it's a path (e.g. /static/product.html?id=...)
-            if (decodedText.startsWith('/')) {
-                html5QrcodeScanner.clear();
-                window.location.href = window.location.origin + decodedText;
-                return;
-            }
+                    // 2. If it's a path
+                    if (decodedText.startsWith('/')) {
+                        window.location.href = window.location.origin + decodedText;
+                        return;
+                    }
 
-            // 3. If it's just a product ID
-            if (decodedText && decodedText.length > 5) {
-                html5QrcodeScanner.clear();
-                window.location.href = `/static/product.html?id=${decodedText}`;
-                return;
-            }
+                    // 3. If it's just a product ID
+                    if (decodedText && decodedText.length > 5) {
+                        window.location.href = `/static/product.html?id=${decodedText}`;
+                        return;
+                    }
 
-            showScanError("Invalid QR Code format.");
+                    showScanError("Invalid QR Code format.");
+                });
+            }
         }
 
         function onScanFailure(error) {
