@@ -95,7 +95,6 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Verification Badge */
         .verify-header {
             text-align: center;
             margin-bottom: 3rem;
@@ -128,7 +127,6 @@
             font-family: monospace;
         }
 
-        /* Sections */
         .card {
             background: var(--card-bg);
             border: 1px solid var(--card-border);
@@ -187,7 +185,6 @@
             line-height: 1.7;
         }
 
-        /* Timeline */
         .timeline {
             position: relative;
             padding-left: 2rem;
@@ -239,7 +236,6 @@
             color: var(--text-muted);
         }
 
-        /* Buttons */
         .btn-outline {
             background: transparent;
             color: white;
@@ -272,26 +268,11 @@
             to { transform: rotate(360deg); }
         }
 
-        /* Image Gallery placeholder */
         .image-gallery {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
             gap: 1rem;
             margin-top: 1rem;
-        }
-
-        .image-placeholder {
-            aspect-ratio: 1;
-            background: var(--input-bg);
-            border: 1px dashed var(--card-border);
-            border-radius: 12px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            color: var(--text-muted);
-            font-size: 0.75rem;
-            gap: 0.5rem;
         }
 
         @media (max-width: 600px) {
@@ -322,7 +303,7 @@
             <h2 id="error-title">Verification Failed</h2>
             <p id="error-msg">This product record could not be found or has been tampered with.</p>
             <a href="/static/index.html" class="btn-outline">
-                <i data-lucide="arrow-left"></i> Back to Scanner
+                <i data-lucide="arrow-left"></i> Back to Home
             </a>
         </div>
 
@@ -367,12 +348,12 @@
                 </div>
                 <div class="info-grid">
                     <div class="info-item">
-                        <label>Farmer Name</label>
-                        <span id="farmer-name">---</span>
+                        <label>Producer Name</label>
+                        <span id="producer-name">---</span>
                     </div>
                     <div class="info-item">
-                        <label>Producer ID</label>
-                        <span id="producer-id">---</span>
+                        <label>Farmer Name</label>
+                        <span id="farmer-name">---</span>
                     </div>
                     <div class="info-item">
                         <label>Location</label>
@@ -394,7 +375,7 @@
                         <div class="timeline-desc">Herb harvested and initial quality verification completed at source.</div>
                     </div>
                     <div class="timeline-item">
-                        <div class="timeline-date">-- -- ----</div>
+                        <div class="timeline-date">Recently</div>
                         <div class="timeline-title">Blockchain Registration</div>
                         <div class="timeline-desc">Digital twin created and anchored to immutable ledger.</div>
                     </div>
@@ -407,11 +388,8 @@
                     <div class="card-icon"><i data-lucide="image"></i></div>
                     <h2>Visual Evidence</h2>
                 </div>
-                <div class="image-gallery">
-                    <div class="image-placeholder">
-                        <i data-lucide="camera" style="width: 24px; opacity: 0.5;"></i>
-                        <span>No images uploaded</span>
-                    </div>
+                <div class="image-gallery" id="gallery">
+                    <!-- Images will be injected here -->
                 </div>
             </section>
 
@@ -422,7 +400,6 @@
     </div>
 
     <script>
-        // Initialize Icons
         lucide.createIcons();
 
         async function fetchProduct() {
@@ -435,44 +412,47 @@
             }
 
             try {
-                // Determine API base URL - assuming same host as static files
-                // If running locally with different ports, this might need adjustment
-                const response = await fetch(`/api/products/${productId}`);
-                const data = await response.json();
-
-                if (data.success && data.product) {
-                    displayProduct(productId, data.product);
-                } else {
-                    showError("Product Not Found", data.message || "The requested product could not be found in our secure registry.");
+                // Fixed API endpoint as per requirements
+                const response = await fetch(`https://ayurchain-1.onrender.com/product/${productId}`);
+                
+                if (!response.ok) {
+                    throw new Error("Product not found");
                 }
+
+                const data = await response.json();
+                
+                // Handle both direct and nested structure
+                const product = data.product || data;
+
+                displayProduct(productId, product);
             } catch (err) {
                 console.error("Fetch error:", err);
-                showError("Connection Error", "Failed to connect to the AyurChain verification network.");
+                showError("Verification Failed", "The requested product could not be found in our secure registry.");
             }
         }
 
-        function displayProduct(id, product) {
+        function displayProduct(id, p) {
             document.getElementById('loading').style.display = 'none';
             document.getElementById('product-content').style.display = 'block';
 
             document.getElementById('display-id').textContent = id;
-            document.getElementById('herb-name').textContent = product.name || 'Unknown Herb';
-            document.getElementById('herb-description').textContent = product.description || 'No description provided.';
-            document.getElementById('product-status').textContent = product.status || 'Verified';
+            document.getElementById('herb-name').textContent = p.name || 'Unknown Herb';
+            document.getElementById('herb-description').textContent = p.description || 'No description provided.';
+            document.getElementById('product-status').textContent = p.status || 'Verified';
             
-            document.getElementById('farmer-name').textContent = product.farmer_name || product.producer_name || 'Anonymous';
-            document.getElementById('producer-id').textContent = product.producer_id || 'N/A';
-            document.getElementById('producer-location').textContent = product.location || 'N/A';
+            document.getElementById('producer-name').textContent = p.producer_name || 'N/A';
+            document.getElementById('farmer-name').textContent = p.farmer_name || 'N/A';
+            document.getElementById('producer-location').textContent = p.location || 'N/A';
             
-            if (product.harvest_date) {
-                document.getElementById('harvest-date').textContent = product.harvest_date;
+            if (p.harvest_date) {
+                document.getElementById('harvest-date').textContent = p.harvest_date;
             }
 
             // Handle Images
-            const gallery = document.querySelector('.image-gallery');
-            if (product.images && product.images.length > 0) {
+            const gallery = document.getElementById('gallery');
+            if (p.images && p.images.length > 0) {
                 gallery.innerHTML = '';
-                product.images.forEach(imgUrl => {
+                p.images.forEach(imgUrl => {
                     const img = document.createElement('img');
                     img.src = imgUrl;
                     img.style.width = '100%';
@@ -480,6 +460,8 @@
                     img.style.border = '1px solid var(--card-border)';
                     gallery.appendChild(img);
                 });
+            } else {
+                gallery.innerHTML = '<p style="color: var(--text-muted); font-size: 0.8rem;">No images uploaded for this batch.</p>';
             }
 
             lucide.createIcons();
@@ -496,7 +478,6 @@
             lucide.createIcons();
         }
 
-        // Start fetch
         fetchProduct();
     </script>
 </body>

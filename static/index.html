@@ -25,6 +25,7 @@
             --text-muted: #94a3b8;
             --input-bg: #0a0d12;
             --error: #ef4444;
+            --success: #22c55e;
         }
 
         * {
@@ -233,7 +234,7 @@
             background: rgba(255, 255, 255, 0.05);
         }
 
-        /* Stats & Workflow (Kept from previous) */
+        /* Stats & Workflow */
         .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; margin-bottom: 8rem; border-top: 1px solid var(--card-border); padding-top: 3rem; }
         .stat-item { text-align: center; }
         .stat-value { font-family: 'Outfit', sans-serif; font-size: 2.5rem; font-weight: 700; color: var(--primary); margin-bottom: 0.25rem; }
@@ -306,13 +307,156 @@
             display: block;
         }
 
-        /* Register Section (Kept) */
+        /* Product Section Styles */
+        .product-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 4rem 1.5rem 6rem;
+        }
+
+        .verify-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .verify-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(34, 197, 94, 0.1);
+            color: var(--primary);
+            padding: 0.75rem 1.5rem;
+            border-radius: 99px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            border: 1px solid var(--primary);
+            box-shadow: 0 0 20px var(--primary-glow);
+            margin-bottom: 1.5rem;
+        }
+
+        .product-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            color: white;
+        }
+
+        .product-id-badge {
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            font-family: monospace;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid var(--card-border);
+            padding-bottom: 1rem;
+        }
+
+        .card-icon {
+            background: rgba(34, 197, 94, 0.1);
+            color: var(--primary);
+            padding: 0.5rem;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .card h2 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.25rem;
+            color: white;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .info-item label {
+            display: block;
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            margin-bottom: 0.25rem;
+        }
+
+        .info-item span {
+            font-weight: 500;
+            color: white;
+        }
+
+        .description-text {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            line-height: 1.7;
+        }
+
+        .timeline {
+            position: relative;
+            padding-left: 2rem;
+            margin-top: 1rem;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 7px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: var(--card-border);
+        }
+
+        .timeline-item {
+            position: relative;
+            padding-bottom: 2rem;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -25px;
+            top: 5px;
+            width: 16px;
+            height: 16px;
+            background: var(--bg-dark);
+            border: 2px solid var(--primary);
+            border-radius: 50%;
+            z-index: 1;
+        }
+
+        .timeline-date {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 0.25rem;
+        }
+
+        /* Loading State */
+        .loading-state {
+            text-align: center;
+            padding: 4rem 2rem;
+        }
+
+        /* Register Section Styles */
         .register-container { max-width: 720px; margin: 0 auto; padding: 4rem 1rem 6rem; }
         .hero-register { text-align: center; margin-bottom: 3rem; }
         .hero-register h1 { font-family: 'Outfit', sans-serif; font-size: 2.5rem; font-weight: 700; margin-bottom: 1rem; color: white; }
-        .card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 16px; padding: 2rem; margin-bottom: 1.5rem; }
-        .card-header { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem; }
-        .card-icon { background: rgba(34, 197, 94, 0.1); color: var(--primary); padding: 0.5rem; border-radius: 8px; display: flex; align-items: center; justify-content: center; }
         .form-group { margin-bottom: 1.25rem; }
         .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
         label { display: block; font-size: 0.75rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase; margin-bottom: 0.5rem; }
@@ -335,6 +479,11 @@
         .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.9); display: none; justify-content: center; align-items: center; z-index: 1000; backdrop-filter: blur(10px); }
         .success-card { background: var(--card-bg); border: 1px solid var(--primary); padding: 3rem; border-radius: 24px; text-align: center; max-width: 400px; box-shadow: 0 0 50px var(--primary-glow); }
 
+        /* Animations */
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        .animate-spin { animation: spin 1s linear infinite; }
+        @keyframes pulse { 0% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.5); opacity: 0.5; } 100% { transform: scale(1); opacity: 1; } }
+
         /* Responsive */
         @media (max-width: 768px) {
             nav { padding: 1rem 2rem; flex-direction: column; gap: 1rem; }
@@ -343,6 +492,7 @@
             .hero-actions { flex-direction: column; width: 100%; }
             .btn-primary, .btn-outline { width: 100%; justify-content: center; }
             .nav-links { width: 100%; justify-content: center; }
+            .form-row { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -350,12 +500,12 @@
 <body>
 
     <nav>
-        <div class="logo" onclick="navigateTo('home')">
+        <div class="logo" onclick="goHome()">
             <i data-lucide="leaf"></i>
             AyurChain <span>v1.0</span>
         </div>
         <div class="nav-links">
-            <a onclick="navigateTo('home')">Home</a>
+            <a onclick="goHome()">Home</a>
             <button class="btn-nav-scan" onclick="navigateTo('scan')">
                 <i data-lucide="scan"></i> Scan & Verify
             </button>
@@ -443,9 +593,110 @@
                 <i data-lucide="refresh-cw" style="width: 18px;"></i> Switch Camera
             </button>
 
-            <button class="btn-outline" style="margin-top: 2rem; width: 100%; justify-content: center;" onclick="navigateTo('home')">
+            <button class="btn-outline" style="margin-top: 2rem; width: 100%; justify-content: center;" onclick="goHome()">
                 <i data-lucide="chevron-left" style="width: 18px;"></i> Back to Home
             </button>
+        </div>
+    </div>
+
+    <!-- PRODUCT DETAILS SECTION -->
+    <div id="product-section" class="page-section">
+        <div class="product-container">
+            <!-- Loading State -->
+            <div id="product-loading" class="loading-state">
+                <i data-lucide="loader-2" class="animate-spin" style="width: 48px; height: 48px; color: var(--primary); margin: 0 auto 1rem;"></i>
+                <p>Verifying authenticity on-chain...</p>
+            </div>
+
+            <!-- Error State -->
+            <div id="product-error" class="loading-state" style="display: none;">
+                <i data-lucide="shield-alert" style="width: 48px; height: 48px; color: var(--error); margin: 0 auto 1rem;"></i>
+                <h2>Verification Failed</h2>
+                <p>This product record could not be found or the link is invalid.</p>
+                <button class="btn-outline" style="margin: 2rem auto 0;" onclick="navigateTo('scan')">Try Scanning Again</button>
+            </div>
+
+            <!-- Content -->
+            <div id="product-content" style="display: none;">
+                <div class="verify-header">
+                    <div class="verify-badge">
+                        <i data-lucide="shield-check"></i>
+                        AUTHENTICITY VERIFIED
+                    </div>
+                    <h1 id="display-name" class="product-title">---</h1>
+                    <p class="product-id-badge">ID: <span id="display-id">---</span></p>
+                </div>
+
+                <section class="card">
+                    <div class="card-header">
+                        <div class="card-icon"><i data-lucide="leaf"></i></div>
+                        <h2>Herb Details</h2>
+                    </div>
+                    <div class="info-item" style="margin-bottom: 1.5rem;">
+                        <label>Description</label>
+                        <p class="description-text" id="display-description">---</p>
+                    </div>
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <label>Current Status</label>
+                            <span id="display-status" style="color: var(--primary); font-weight: 700;">---</span>
+                        </div>
+                        <div class="info-item">
+                            <label>Last Verified</label>
+                            <span id="display-verified">Today</span>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="card">
+                    <div class="card-header">
+                        <div class="card-icon"><i data-lucide="user"></i></div>
+                        <h2>Producer Profile</h2>
+                    </div>
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <label>Producer Name</label>
+                            <span id="display-producer">---</span>
+                        </div>
+                        <div class="info-item">
+                            <label>Farmer Name</label>
+                            <span id="display-farmer">---</span>
+                        </div>
+                        <div class="info-item">
+                            <label>Location</label>
+                            <span id="display-location">---</span>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="card">
+                    <div class="card-header">
+                        <div class="card-icon"><i data-lucide="calendar"></i></div>
+                        <h2>Supply Chain Timeline</h2>
+                    </div>
+                    <div class="timeline">
+                        <div class="timeline-item">
+                            <div class="timeline-date" id="display-harvest">---</div>
+                            <div class="timeline-title">Harvesting & Quality Check</div>
+                            <div class="timeline-desc">Herb harvested and initial quality verification completed at source.</div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-date">Verified Recently</div>
+                            <div class="timeline-title">Blockchain Registration</div>
+                            <div class="timeline-desc">Digital twin created and anchored to immutable ledger.</div>
+                        </div>
+                    </div>
+                </section>
+
+                <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+                    <button class="btn-outline" style="flex: 1; justify-content: center;" onclick="navigateTo('scan')">
+                        <i data-lucide="scan"></i> Scan Another
+                    </button>
+                    <button class="btn-outline" style="flex: 1; justify-content: center;" onclick="goHome()">
+                        Back to Home
+                    </button>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -484,12 +735,12 @@
                     </div>
                     <div class="form-row">
                         <div class="form-group">
-                            <label>Full Name <span class="required">*</span></label>
-                            <input type="text" id="producer_name" placeholder="Farmer's full name" required>
+                            <label>Producer Name <span class="required">*</span></label>
+                            <input type="text" id="producer_name" placeholder="Company/Producer Name" required>
                         </div>
                         <div class="form-group">
-                            <label>Farmer ID Number <span class="required">*</span></label>
-                            <input type="text" id="producer_id" placeholder="e.g. KCC-2024-1234" required>
+                            <label>Farmer Name <span class="required">*</span></label>
+                            <input type="text" id="farmer_name" placeholder="Farmer's Full Name" required>
                         </div>
                     </div>
                     <div class="form-row">
@@ -498,8 +749,8 @@
                             <input type="text" id="location" placeholder="Village, District, State" required>
                         </div>
                         <div class="form-group">
-                            <label>Phone</label>
-                            <input type="text" id="phone" placeholder="Contact number">
+                            <label>Farmer ID</label>
+                            <input type="text" id="producer_id" placeholder="e.g. KCC-2024-1234">
                         </div>
                     </div>
                 </section>
@@ -517,7 +768,7 @@
                 </section>
 
                 <div style="display: flex; gap: 1rem; margin-top: 2rem;">
-                    <button type="button" class="btn-outline" style="flex: 1; justify-content: center;" onclick="navigateTo('home')">
+                    <button type="button" class="btn-outline" style="flex: 1; justify-content: center;" onclick="goHome()">
                         Back
                     </button>
                     <button type="submit" class="btn-primary" style="flex: 2; justify-content: center;" id="submitBtn">
@@ -578,13 +829,24 @@
                 section.classList.remove('active');
             });
             // Show target section
-            document.getElementById(sectionId + '-section').classList.add('active');
+            const target = document.getElementById(sectionId + '-section');
+            if (target) {
+                target.classList.add('active');
+            }
             window.scrollTo({ top: 0, behavior: 'smooth' });
 
             // Initialize scanner if entering scan section
             if (sectionId === 'scan') {
                 initScanner();
             }
+        }
+
+        function goHome() {
+            // Clear URL and navigate home
+            const url = new URL(window.location.href);
+            url.searchParams.delete('id');
+            window.history.pushState({}, '', url.pathname);
+            navigateTo('home');
         }
 
         async function initScanner() {
@@ -655,32 +917,24 @@
             
             if (html5QrCode) {
                 html5QrCode.stop().then(() => {
-                    // 1. If it's a full URL
+                    // Redirect browser to scanned URL as per requirement
+                    // This will reload the page and Requirement #2 logic will handle the display
                     if (decodedText.startsWith('http')) {
                         window.location.href = decodedText;
-                        return;
+                    } else if (decodedText.includes('id=')) {
+                        const params = new URLSearchParams(decodedText.split('?')[1]);
+                        const id = params.get('id');
+                        window.location.href = `index.html?id=${id}`;
+                    } else {
+                        // Assume it's just the ID
+                        window.location.href = `index.html?id=${decodedText}`;
                     }
-
-                    // 2. If it's a path
-                    if (decodedText.startsWith('/')) {
-                        window.location.href = window.location.origin + decodedText;
-                        return;
-                    }
-
-                    // 3. If it's just a product ID
-                    if (decodedText && decodedText.length > 5) {
-                        window.location.href = `/static/product.html?id=${decodedText}`;
-                        return;
-                    }
-
-                    showScanError("Invalid QR Code format.");
                 });
             }
         }
 
         function onScanFailure(error) {
-            // Many failures are just "QR code not found in frame", so we don't show them
-            // console.warn(`Code scan error = ${error}`);
+            // Ignored as per typical html5-qrcode usage
         }
 
         function showScanError(msg) {
@@ -691,7 +945,60 @@
             lucide.createIcons();
         }
 
-        // Form Submission (Kept from previous)
+        // Data Fetching & Display logic
+        async function fetchAndDisplayProduct(id) {
+            const loadingEl = document.getElementById('product-loading');
+            const contentEl = document.getElementById('product-content');
+            const errorEl = document.getElementById('product-error');
+
+            loadingEl.style.display = 'block';
+            contentEl.style.display = 'none';
+            errorEl.style.display = 'none';
+
+            try {
+                // Fetch from the exact URL requested by user
+                const response = await fetch(`https://ayurchain-1.onrender.com/product/${id}`);
+                
+                if (!response.ok) {
+                    throw new Error("Product not found");
+                }
+
+                const data = await response.json();
+                
+                // Requirement #4: Display data (handling potential nested "product" object from backend)
+                const p = data.product || data;
+
+                document.getElementById('display-name').textContent = p.name || 'N/A';
+                document.getElementById('display-id').textContent = id;
+                document.getElementById('display-description').textContent = p.description || 'No description available.';
+                document.getElementById('display-producer').textContent = p.producer_name || 'N/A';
+                document.getElementById('display-farmer').textContent = p.farmer_name || 'N/A';
+                document.getElementById('display-location').textContent = p.location || 'N/A';
+                document.getElementById('display-harvest').textContent = p.harvest_date || 'N/A';
+                document.getElementById('display-status').textContent = p.status || 'Verified';
+
+                loadingEl.style.display = 'none';
+                contentEl.style.display = 'block';
+                lucide.createIcons();
+
+            } catch (err) {
+                console.error("Fetch error:", err);
+                loadingEl.style.display = 'none';
+                errorEl.style.display = 'block';
+            }
+        }
+
+        // Requirement #2: Extract product_id on load
+        window.addEventListener('load', () => {
+            const params = new URLSearchParams(window.location.search);
+            const id = params.get("id");
+            if (id) {
+                navigateTo('product');
+                fetchAndDisplayProduct(id);
+            }
+        });
+
+        // Form Submission
         const form = document.getElementById('productForm');
         const submitBtn = document.getElementById('submitBtn');
         const overlay = document.getElementById('successOverlay');
@@ -700,7 +1007,7 @@
             e.preventDefault();
             
             submitBtn.disabled = true;
-            submitBtn.innerHTML = '<i data-lucide="loader-2" class="animate-spin" style="animation: spin 1s linear infinite;"></i> Processing...';
+            submitBtn.innerHTML = '<i data-lucide="loader-2" class="animate-spin" style="width: 18px;"></i> Processing...';
             lucide.createIcons();
 
             const data = {
@@ -708,7 +1015,7 @@
                 description: document.getElementById('description').value,
                 producer_name: document.getElementById('producer_name').value,
                 producer_id: document.getElementById('producer_id').value,
-                farmer_name: document.getElementById('producer_name').value, 
+                farmer_name: document.getElementById('farmer_name').value, 
                 location: document.getElementById('location').value,
                 harvest_date: document.getElementById('harvest_date').value,
                 status: "Verified"
@@ -742,11 +1049,6 @@
             }
         });
     </script>
-
-    <style>
-        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-        @keyframes pulse { 0% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.5); opacity: 0.5; } 100% { transform: scale(1); opacity: 1; } }
-    </style>
 </body>
 
 </html>
