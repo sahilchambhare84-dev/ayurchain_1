@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>AyurChain | Register Product</title>
+    <title>AyurChain | Authenticity rooted in Trust</title>
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -61,6 +61,7 @@
             font-weight: 700;
             font-size: 1.25rem;
             color: white;
+            cursor: pointer;
         }
 
         .logo span {
@@ -79,13 +80,14 @@
             font-weight: 500;
             transition: color 0.3s;
             font-size: 0.9rem;
+            cursor: pointer;
         }
 
         .nav-links a:hover {
             color: white;
         }
 
-        .btn-register-nav {
+        .btn-nav-register {
             background: transparent;
             color: var(--primary);
             border: 1px solid var(--primary);
@@ -98,28 +100,272 @@
             transition: all 0.3s;
         }
 
-        .btn-register-nav:hover {
+        .btn-nav-register:hover {
             background: var(--primary);
             color: black;
         }
 
-        /* Hero */
-        .hero {
-            text-align: center;
-            padding: 4rem 1rem 2rem;
+        /* Section Visibility */
+        .page-section {
+            display: none;
+            animation: fadeIn 0.5s ease-out;
         }
 
-        .breadcrumb {
+        .page-section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Home Section */
+        .home-hero {
+            text-align: center;
+            padding: 8rem 1rem 4rem;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .badge-live {
+            background: rgba(34, 197, 94, 0.1);
+            color: var(--primary);
+            padding: 0.4rem 1rem;
+            border-radius: 99px;
+            font-size: 0.65rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            border: 1px solid rgba(34, 197, 94, 0.2);
+            margin-bottom: 2rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .home-hero h1 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 4rem;
+            font-weight: 700;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            color: white;
+        }
+
+        .home-hero p {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            margin-bottom: 3rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .hero-actions {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-bottom: 6rem;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: black;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 99px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            box-shadow: 0 0 25px var(--primary-glow);
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 35px rgba(34, 197, 94, 0.5);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: white;
+            border: 1px solid var(--card-border);
+            padding: 1rem 2rem;
+            border-radius: 99px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-outline:hover {
+            border-color: white;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        /* Stats */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin-bottom: 8rem;
+            border-top: 1px solid var(--card-border);
+            padding-top: 3rem;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-family: 'Outfit', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 0.25rem;
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        /* Workflow */
+        .section-label {
             color: var(--primary);
             font-size: 0.75rem;
             font-weight: 700;
             letter-spacing: 0.1em;
             text-transform: uppercase;
-            margin-bottom: 1rem;
+            text-align: center;
             display: block;
+            margin-bottom: 1rem;
         }
 
-        .hero h1 {
+        .section-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 4rem;
+            color: white;
+        }
+
+        .workflow-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 8rem;
+            padding: 0 4rem;
+        }
+
+        .workflow-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 2.5rem;
+            position: relative;
+            transition: all 0.3s;
+        }
+
+        .workflow-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-5px);
+        }
+
+        .workflow-number {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        .workflow-icon {
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+        }
+
+        .workflow-card h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: white;
+        }
+
+        .workflow-card p {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        /* Timeline Summary Section */
+        .timeline-summary {
+            background: linear-gradient(to right, rgba(15, 18, 24, 0), rgba(34, 197, 94, 0.05), rgba(15, 18, 24, 0));
+            padding: 6rem 4rem;
+            border-radius: 32px;
+            margin: 0 4rem 8rem;
+            border: 1px solid var(--card-border);
+        }
+
+        .summary-header {
+            max-width: 500px;
+            margin-bottom: 4rem;
+        }
+
+        .stages-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+        }
+
+        .stage-card {
+            background: rgba(10, 13, 18, 0.5);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            transition: all 0.3s;
+        }
+
+        .stage-card:hover {
+            background: rgba(34, 197, 94, 0.05);
+            border-color: var(--primary);
+        }
+
+        .stage-card i {
+            color: var(--primary);
+            width: 20px;
+        }
+
+        .stage-card span {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: white;
+        }
+
+        /* Register Section (Existing) */
+        .register-container {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 4rem 1rem 6rem;
+        }
+
+        .hero-register {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .hero-register h1 {
             font-family: 'Outfit', sans-serif;
             font-size: 2.5rem;
             font-weight: 700;
@@ -127,32 +373,17 @@
             color: white;
         }
 
-        .hero p {
+        .hero-register p {
             color: var(--text-muted);
-            max-width: 500px;
-            margin: 0 auto;
             font-size: 0.95rem;
         }
 
-        /* Container */
-        .container {
-            max-width: 720px;
-            margin: 0 auto;
-            padding-bottom: 6rem;
-        }
-
-        /* Card Sections */
         .card {
             background: var(--card-bg);
             border: 1px solid var(--card-border);
             border-radius: 16px;
             padding: 2rem;
             margin-bottom: 1.5rem;
-            transition: border-color 0.3s, box-shadow 0.3s;
-        }
-
-        .card:hover {
-            border-color: #2d3748;
         }
 
         .card-header {
@@ -178,157 +409,14 @@
             color: white;
         }
 
-        /* Form Controls */
-        .form-group {
-            margin-bottom: 1.25rem;
-            position: relative;
-        }
-
-        .form-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1rem;
-        }
-
-        label {
-            display: block;
-            font-size: 0.75rem;
-            font-weight: 600;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            margin-bottom: 0.5rem;
-        }
-
-        label span.required {
-            color: var(--primary);
-            margin-left: 2px;
-        }
-
-        input,
-        textarea,
-        select {
-            width: 100%;
-            background: var(--input-bg);
-            border: 1px solid var(--card-border);
-            border-radius: 8px;
-            padding: 0.75rem 1rem;
-            color: white;
-            font-family: inherit;
-            font-size: 0.9rem;
-            transition: all 0.3s;
-        }
-
-        input:focus,
-        textarea:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.1);
-        }
-
-        input::placeholder,
-        textarea::placeholder {
-            color: #4a5568;
-        }
-
-        textarea {
-            resize: vertical;
-            min-height: 100px;
-        }
-
-        /* File Input */
-        .file-input-wrapper {
-            position: relative;
-            background: var(--input-bg);
-            border: 1px dashed var(--card-border);
-            border-radius: 8px;
-            padding: 0.75rem 1rem;
-            display: flex;
-            align-items: center;
-            cursor: pointer;
-            transition: border-color 0.3s;
-        }
-
-        .file-input-wrapper:hover {
-            border-color: var(--primary);
-        }
-
-        .file-input-wrapper input[type="file"] {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            opacity: 0;
-            cursor: pointer;
-        }
-
-        .file-label {
-            font-size: 0.85rem;
-            color: var(--text-muted);
-        }
-
-        /* Timeline Section */
-        .timeline-steps {
-            display: flex;
-            gap: 0.5rem;
-            font-size: 0.7rem;
-            color: var(--text-muted);
-            margin-bottom: 1.5rem;
-            text-transform: uppercase;
-            font-weight: 500;
-        }
-
-        .timeline-steps span.active {
-            color: var(--primary);
-        }
-
-        .timeline-row {
-            display: grid;
-            grid-template-columns: 140px 1fr;
-            gap: 1rem;
-            margin-bottom: 1rem;
-            align-items: center;
-        }
-
-        .timeline-label {
-            font-size: 0.7rem;
-            font-weight: 600;
-            color: var(--text-muted);
-            text-transform: uppercase;
-        }
-
-        /* Submit Button */
-        .btn-submit-container {
-            display: flex;
-            justify-content: flex-end;
-            margin-top: 1rem;
-        }
-
-        .btn-submit {
-            background: var(--primary);
-            color: black;
-            border: none;
-            padding: 1rem 2rem;
-            border-radius: 99px;
-            font-weight: 700;
-            font-size: 0.9rem;
-            cursor: pointer;
-            box-shadow: 0 0 25px var(--primary-glow);
-            transition: all 0.3s;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .btn-submit:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 0 35px rgba(34, 197, 94, 0.5);
-        }
-
-        .btn-submit:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            transform: none;
-        }
+        .form-group { margin-bottom: 1.25rem; }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+        label { display: block; font-size: 0.75rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase; margin-bottom: 0.5rem; }
+        label span.required { color: var(--primary); margin-left: 2px; }
+        input, textarea { width: 100%; background: var(--input-bg); border: 1px solid var(--card-border); border-radius: 8px; padding: 0.75rem 1rem; color: white; font-family: inherit; font-size: 0.9rem; transition: all 0.3s; }
+        input:focus, textarea:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.1); }
+        .error-message { color: var(--error); font-size: 0.7rem; margin-top: 0.25rem; display: none; }
+        .input-error { border-color: var(--error) !important; }
 
         /* Footer */
         footer {
@@ -340,105 +428,25 @@
             gap: 2rem;
         }
 
-        .footer-top {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-        }
-
-        .footer-logo {
-            display: flex;
-            flex-direction: column;
-            gap: 0.25rem;
-        }
-
-        .footer-logo .logo-text {
-            font-family: 'Outfit', sans-serif;
-            font-weight: 700;
-            font-size: 1rem;
-            color: white;
-        }
-
-        .footer-logo .tagline {
-            font-size: 0.7rem;
-            color: var(--text-muted);
-        }
-
-        .footer-mission {
-            font-size: 0.75rem;
-            color: var(--text-muted);
-            max-width: 400px;
-            text-align: center;
-        }
-
-        .footer-status {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            font-size: 0.7rem;
-            color: var(--text-muted);
-        }
-
-        .status-dot {
-            width: 6px;
-            height: 6px;
-            background: var(--primary);
-            border-radius: 50%;
-            box-shadow: 0 0 8px var(--primary);
-        }
-
-        /* Validation Messages */
-        .error-message {
-            color: var(--error);
-            font-size: 0.7rem;
-            margin-top: 0.25rem;
-            display: none;
-        }
-
-        .input-error {
-            border-color: var(--error) !important;
-        }
+        .footer-top { display: flex; justify-content: space-between; align-items: flex-start; }
+        .footer-logo { display: flex; flex-direction: column; gap: 0.25rem; }
+        .logo-text { font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 1rem; color: white; }
+        .tagline { font-size: 0.7rem; color: var(--text-muted); }
+        .footer-mission { font-size: 0.75rem; color: var(--text-muted); max-width: 400px; text-align: center; }
+        .footer-status { display: flex; align-items: center; gap: 0.5rem; font-size: 0.7rem; color: var(--text-muted); }
+        .status-dot { width: 6px; height: 6px; background: var(--primary); border-radius: 50%; box-shadow: 0 0 8px var(--primary); }
 
         /* Success Overlay */
-        .overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.9);
-            display: none;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-            backdrop-filter: blur(10px);
-        }
-
-        .success-card {
-            background: var(--card-bg);
-            border: 1px solid var(--primary);
-            padding: 3rem;
-            border-radius: 24px;
-            text-align: center;
-            max-width: 400px;
-            box-shadow: 0 0 50px var(--primary-glow);
-        }
-
-        .success-card h2 {
-            color: white;
-            margin: 1rem 0;
-        }
-
-        .success-card p {
-            color: var(--text-muted);
-            margin-bottom: 2rem;
-        }
+        .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.9); display: none; justify-content: center; align-items: center; z-index: 1000; backdrop-filter: blur(10px); }
+        .success-card { background: var(--card-bg); border: 1px solid var(--primary); padding: 3rem; border-radius: 24px; text-align: center; max-width: 400px; box-shadow: 0 0 50px var(--primary-glow); }
 
         /* Responsive */
         @media (max-width: 768px) {
             nav { padding: 1rem 2rem; }
+            .home-hero h1 { font-size: 2.5rem; }
+            .stats-grid, .workflow-grid, .stages-grid { grid-template-columns: 1fr; }
+            .workflow-grid, .timeline-summary { padding: 2rem; margin: 0 1rem 4rem; }
             .form-row { grid-template-columns: 1fr; }
-            .timeline-row { grid-template-columns: 1fr; }
             footer { padding: 2rem; }
             .footer-top { flex-direction: column; gap: 2rem; align-items: center; text-align: center; }
         }
@@ -448,149 +456,186 @@
 <body>
 
     <nav>
-        <div class="logo">
+        <div class="logo" onclick="navigateTo('home')">
             <i data-lucide="leaf"></i>
             AyurChain <span>v1.0</span>
         </div>
         <div class="nav-links">
-            <a href="#">Home</a>
-            <button class="btn-register-nav">Register</button>
+            <a onclick="navigateTo('home')">Home</a>
+            <button class="btn-nav-register" onclick="navigateTo('register')">Register</button>
         </div>
     </nav>
 
-    <div class="hero">
-        <span class="breadcrumb">/ Register</span>
-        <h1>Register a new product</h1>
-        <p>Enter herb, farmer, supply chain and photos. We'll generate a verifiable QR.</p>
+    <!-- HOME SECTION -->
+    <div id="home-section" class="page-section active">
+        <div class="home-hero">
+            <div class="badge-live">
+                <div class="status-dot" style="width: 4px; height: 4px;"></div>
+                LIVE · VERIFIED SUPPLY CHAIN
+            </div>
+            <h1>Authenticity,<br>cryptographically rooted.</h1>
+            <p>Every Ayurvedic herb gets a tamper-proof digital identity. Producers register the journey. Buyers scan one QR to verify the source.</p>
+            
+            <div class="hero-actions">
+                <button class="btn-primary" onclick="navigateTo('register')">
+                    Register Product <i data-lucide="arrow-right" style="width: 18px;"></i>
+                </button>
+                <button class="btn-outline">How it works</button>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-value">100%</div>
+                    <div class="stat-label">On-chain provenance</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value"><1s</div>
+                    <div class="stat-label">Verification time</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">0</div>
+                    <div class="stat-label">Trust assumptions</div>
+                </div>
+            </div>
+        </div>
+
+        <span class="section-label">/ Workflow</span>
+        <h2 class="section-title">Three steps to trust</h2>
+        
+        <div class="workflow-grid">
+            <div class="workflow-card">
+                <div class="workflow-number">01</div>
+                <div class="workflow-icon"><i data-lucide="user-plus"></i></div>
+                <h3>Producer registers</h3>
+                <p>Farmer ID, herb data, photos and timeline are signed and stored on the immutable ledger.</p>
+            </div>
+            <div class="workflow-card">
+                <div class="workflow-number">02</div>
+                <div class="workflow-icon"><i data-lucide="qr-code"></i></div>
+                <h3>QR is generated</h3>
+                <p>A unique cryptographic QR is created for each batch and printed on the packaging.</p>
+            </div>
+            <div class="workflow-card">
+                <div class="workflow-number">03</div>
+                <div class="workflow-icon"><i data-lucide="shield-check"></i></div>
+                <h3>Buyer scans</h3>
+                <p>One scan opens the verified record — origin, journey, and chemical integrity.</p>
+            </div>
+        </div>
+
+        <div class="timeline-summary">
+            <div class="summary-header">
+                <span class="section-label" style="text-align: left;">/ Supply Chain</span>
+                <h2 style="font-family: 'Outfit'; font-size: 2.2rem; color: white; margin-top: 1rem;">Every stage, on every label.</h2>
+                <p style="color: var(--text-muted); margin-top: 1rem;">Buyers witness the full path — harvest, processing, packaging, delivery.</p>
+            </div>
+            
+            <div class="stages-grid">
+                <div class="stage-card">
+                    <i data-lucide="sprout"></i>
+                    <span>Harvest</span>
+                </div>
+                <div class="stage-card">
+                    <i data-lucide="flask-conical"></i>
+                    <span>Processing</span>
+                </div>
+                <div class="stage-card">
+                    <i data-lucide="box"></i>
+                    <span>Packaging</span>
+                </div>
+                <div class="stage-card">
+                    <i data-lucide="truck"></i>
+                    <span>Delivered</span>
+                </div>
+            </div>
+
+            <button class="btn-primary" style="margin-top: 3rem;" onclick="navigateTo('register')">
+                Get started — It's free <i data-lucide="arrow-right" style="width: 18px;"></i>
+            </button>
+        </div>
     </div>
 
-    <div class="container">
-        <form id="productForm">
-            <!-- Herb Details -->
-            <section class="card">
-                <div class="card-header">
-                    <div class="card-icon"><i data-lucide="leaf"></i></div>
-                    <h2>Herb Details</h2>
-                </div>
-                <div class="form-group">
-                    <label>Herb Name <span class="required">*</span></label>
-                    <input type="text" id="name" placeholder="e.g. Ashwagandha" required>
-                    <div class="error-message" id="error-name">Please enter the herb name.</div>
-                </div>
-                <div class="form-group">
-                    <label>Description</label>
-                    <textarea id="description" placeholder="Variety, qualities, intended use..."></textarea>
-                </div>
-            </section>
-
-            <!-- Farmer Identity Card -->
-            <section class="card">
-                <div class="card-header">
-                    <div class="card-icon"><i data-lucide="user"></i></div>
-                    <h2>Farmer Identity Card</h2>
-                </div>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>Full Name <span class="required">*</span></label>
-                        <input type="text" id="producer_name" placeholder="Farmer's full name" required>
-                        <div class="error-message" id="error-producer_name">Please enter the producer name.</div>
-                    </div>
-                    <div class="form-group">
-                        <label>Farmer ID Number <span class="required">*</span></label>
-                        <input type="text" id="producer_id" placeholder="e.g. KCC-2024-1234" required>
-                        <div class="error-message" id="error-producer_id">Please enter the producer ID.</div>
-                    </div>
-                </div>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>Location <span class="required">*</span></label>
-                        <input type="text" id="location" placeholder="Village, District, State" required>
-                        <div class="error-message" id="error-location">Please enter the location.</div>
-                    </div>
-                    <div class="form-group">
-                        <label>Phone</label>
-                        <input type="text" id="phone" placeholder="Contact number">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label>About the Farmer</label>
-                    <textarea id="about" placeholder="Bio or experience details..." style="min-height: 80px;"></textarea>
-                </div>
-                <div class="form-group">
-                    <label>Farmer Photo</label>
-                    <div class="file-input-wrapper">
-                        <i data-lucide="upload" style="width: 16px; margin-right: 0.5rem; color: var(--text-muted);"></i>
-                        <span class="file-label">Choose File No file chosen</span>
-                        <input type="file" id="farmer_photo">
-                    </div>
-                </div>
-            </section>
-
-            <!-- Supply Chain Timeline -->
-            <section class="card">
-                <div class="card-header">
-                    <div class="card-icon"><i data-lucide="calendar"></i></div>
-                    <h2>Supply Chain Timeline</h2>
-                </div>
-                <div class="timeline-steps">
-                    <span class="active">Harvest</span> → <span>Processing</span> → <span>Packaging</span> → <span>Delivered</span>
-                </div>
-
-                <div class="timeline-row">
-                    <div class="timeline-label">Harvest Date <span class="required">*</span></div>
-                    <div class="form-row">
-                        <input type="date" id="harvest_date" required>
-                        <input type="text" id="harvest_note" placeholder="Notes about harvest">
-                    </div>
-                </div>
-                <div class="error-message" id="error-harvest_date" style="margin-left: 150px; margin-bottom: 1rem;">Please select a harvest date.</div>
-
-                <div class="timeline-row">
-                    <div class="timeline-label">Processing Date</div>
-                    <div class="form-row">
-                        <input type="date" id="processing_date">
-                        <input type="text" id="processing_note" placeholder="Notes about processing">
-                    </div>
-                </div>
-
-                <div class="timeline-row">
-                    <div class="timeline-label">Packaging Date</div>
-                    <div class="form-row">
-                        <input type="date" id="packaging_date">
-                        <input type="text" id="packaging_note" placeholder="Notes about packaging">
-                    </div>
-                </div>
-
-                <div class="timeline-row">
-                    <div class="timeline-label">Delivery Date</div>
-                    <div class="form-row">
-                        <input type="date" id="delivery_date">
-                        <input type="text" id="delivery_note" placeholder="Notes about delivery">
-                    </div>
-                </div>
-            </section>
-
-            <!-- Product Photos -->
-            <section class="card">
-                <div class="card-header">
-                    <div class="card-icon"><i data-lucide="image"></i></div>
-                    <h2>Product Photos</h2>
-                </div>
-                <div class="form-group">
-                    <div class="file-input-wrapper">
-                        <i data-lucide="upload" style="width: 16px; margin-right: 0.5rem; color: var(--text-muted);"></i>
-                        <span class="file-label">Choose Files No file chosen</span>
-                        <input type="file" id="product_photos" multiple>
-                    </div>
-                </div>
-            </section>
-
-            <div class="btn-submit-container">
-                <button type="submit" class="btn-submit" id="submitBtn">
-                    Generate QR & Publish
-                </button>
+    <!-- REGISTER SECTION -->
+    <div id="register-section" class="page-section">
+        <div class="register-container">
+            <div class="hero-register">
+                <span class="section-label">/ Register</span>
+                <h1>Register a new product</h1>
+                <p>Enter herb, farmer, supply chain and photos. We'll generate a verifiable QR.</p>
             </div>
-        </form>
+
+            <form id="productForm">
+                <!-- Herb Details -->
+                <section class="card">
+                    <div class="card-header">
+                        <div class="card-icon"><i data-lucide="leaf"></i></div>
+                        <h2>Herb Details</h2>
+                    </div>
+                    <div class="form-group">
+                        <label>Herb Name <span class="required">*</span></label>
+                        <input type="text" id="name" placeholder="e.g. Ashwagandha" required>
+                        <div class="error-message" id="error-name">Please enter the herb name.</div>
+                    </div>
+                    <div class="form-group">
+                        <label>Description</label>
+                        <textarea id="description" placeholder="Variety, qualities, intended use..."></textarea>
+                    </div>
+                </section>
+
+                <!-- Farmer Identity Card -->
+                <section class="card">
+                    <div class="card-header">
+                        <div class="card-icon"><i data-lucide="user"></i></div>
+                        <h2>Farmer Identity Card</h2>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Full Name <span class="required">*</span></label>
+                            <input type="text" id="producer_name" placeholder="Farmer's full name" required>
+                            <div class="error-message" id="error-producer_name">Please enter the producer name.</div>
+                        </div>
+                        <div class="form-group">
+                            <label>Farmer ID Number <span class="required">*</span></label>
+                            <input type="text" id="producer_id" placeholder="e.g. KCC-2024-1234" required>
+                            <div class="error-message" id="error-producer_id">Please enter the producer ID.</div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Location <span class="required">*</span></label>
+                            <input type="text" id="location" placeholder="Village, District, State" required>
+                            <div class="error-message" id="error-location">Please enter the location.</div>
+                        </div>
+                        <div class="form-group">
+                            <label>Phone</label>
+                            <input type="text" id="phone" placeholder="Contact number">
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Timeline -->
+                <section class="card">
+                    <div class="card-header">
+                        <div class="card-icon"><i data-lucide="calendar"></i></div>
+                        <h2>Supply Chain Timeline</h2>
+                    </div>
+                    <div class="form-group">
+                        <label>Harvest Date <span class="required">*</span></label>
+                        <input type="date" id="harvest_date" required>
+                        <div class="error-message" id="error-harvest_date">Please select a harvest date.</div>
+                    </div>
+                </section>
+
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 2rem;">
+                    <button type="button" class="btn-outline" onclick="navigateTo('home')">
+                        <i data-lucide="chevron-left" style="width: 18px; margin-right: 0.5rem;"></i> Back to Home
+                    </button>
+                    <button type="submit" class="btn-primary" id="submitBtn">
+                        Generate QR & Publish
+                    </button>
+                </div>
+            </form>
+        </div>
     </div>
 
     <footer>
@@ -627,28 +672,27 @@
             50% { transform: scale(1.5); opacity: 0.5; }
             100% { transform: scale(1); opacity: 1; }
         }
+        .animate-spin { animation: spin 1s linear infinite; }
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
     </style>
 
     <script>
         // Initialize Icons
         lucide.createIcons();
 
-        // Handle File Input Labels
-        document.querySelectorAll('input[type="file"]').forEach(input => {
-            input.addEventListener('change', e => {
-                const label = e.target.parentElement.querySelector('.file-label');
-                if (e.target.files.length > 0) {
-                    label.textContent = e.target.files.length > 1 
-                        ? `${e.target.files.length} files selected` 
-                        : e.target.files[0].name;
-                    label.style.color = 'white';
-                } else {
-                    label.textContent = 'Choose File No file chosen';
-                    label.style.color = 'var(--text-muted)';
-                }
+        // Navigation Logic
+        function navigateTo(sectionId) {
+            // Hide all sections
+            document.querySelectorAll('.page-section').forEach(section => {
+                section.classList.remove('active');
             });
-        });
+            // Show target section
+            document.getElementById(sectionId + '-section').classList.add('active');
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
 
+        // Form Submission
         const form = document.getElementById('productForm');
         const submitBtn = document.getElementById('submitBtn');
         const overlay = document.getElementById('successOverlay');
@@ -690,30 +734,12 @@
             lucide.createIcons();
 
             // Prepare Data
-            // We combine extra fields into description to avoid changing API structure
-            const baseDescription = document.getElementById('description').value;
-            const phone = document.getElementById('phone').value;
-            const about = document.getElementById('about').value;
-            const procDate = document.getElementById('processing_date').value;
-            const packDate = document.getElementById('packaging_date').value;
-            const delDate = document.getElementById('delivery_date').value;
-            
-            let fullDescription = baseDescription;
-            if (phone || about || procDate) {
-                fullDescription += "\n\n--- Additional Details ---";
-                if (phone) fullDescription += `\nPhone: ${phone}`;
-                if (about) fullDescription += `\nAbout Farmer: ${about}`;
-                if (procDate) fullDescription += `\nProcessing: ${procDate}`;
-                if (packDate) fullDescription += `\nPackaging: ${packDate}`;
-                if (delDate) fullDescription += `\nDelivery: ${delDate}`;
-            }
-
             const data = {
                 name: document.getElementById('name').value,
-                description: fullDescription,
+                description: document.getElementById('description').value,
                 producer_name: document.getElementById('producer_name').value,
                 producer_id: document.getElementById('producer_id').value,
-                farmer_name: document.getElementById('producer_name').value, // Map to same as producer_name
+                farmer_name: document.getElementById('producer_name').value, 
                 location: document.getElementById('location').value,
                 harvest_date: document.getElementById('harvest_date').value,
                 status: "Verified"
@@ -731,7 +757,6 @@
                 const result = await response.json();
 
                 if (response.ok) {
-                    // Show success UI
                     overlay.style.display = 'flex';
                     setTimeout(() => {
                         window.open("https://ayurchain-1.onrender.com" + result.qr_code, "_self");
@@ -740,12 +765,14 @@
                     alert("❌ Error: " + (result.detail || "Failed to create product"));
                     submitBtn.disabled = false;
                     submitBtn.textContent = 'Generate QR & Publish';
+                    lucide.createIcons();
                 }
             } catch (error) {
                 console.error('Error:', error);
                 alert("❌ Connection Error: Could not reach the server.");
                 submitBtn.disabled = false;
                 submitBtn.textContent = 'Generate QR & Publish';
+                lucide.createIcons();
             }
         });
 
@@ -759,17 +786,6 @@
             });
         });
     </script>
-
-    <style>
-        .animate-spin {
-            animation: spin 1s linear infinite;
-        }
-        @keyframes spin {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-    </style>
-
 </body>
 
 </html>
