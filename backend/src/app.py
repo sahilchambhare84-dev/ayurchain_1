@@ -77,7 +77,8 @@ def add_product(product: Product):
     doc_ref.set(data)
 
     # QR LINK (IMPORTANT)
-    qr_data = f"http://localhost:8000/static/index.html?id={product_id}"
+    BASE_URL = "https://ayurchain-1.onrender.com"
+    qr_data = f"{BASE_URL}/static/index.html?id={product_id}"
 
     qr_img = qrcode.make(qr_data)
     qr_path = os.path.join(QR_DIR, f"{product_id}.png")
