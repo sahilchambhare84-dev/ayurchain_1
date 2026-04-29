@@ -258,26 +258,6 @@
             border: none !important;
         }
 
-        #reader__dashboard_section_csr button {
-            background: var(--primary) !important;
-            color: black !important;
-            border: none !important;
-            padding: 8px 16px !important;
-            border-radius: 8px !important;
-            font-weight: 600 !important;
-            cursor: pointer !important;
-            margin: 10px !important;
-        }
-
-        #reader__camera_selection {
-            background: var(--input-bg) !important;
-            color: white !important;
-            border: 1px solid var(--card-border) !important;
-            padding: 8px !important;
-            border-radius: 8px !important;
-            margin-bottom: 1rem !important;
-        }
-
         .scan-status {
             margin-top: 1.5rem;
             padding: 1rem;
@@ -392,45 +372,10 @@
             line-height: 1.7;
         }
 
-        .timeline {
-            position: relative;
-            padding-left: 2rem;
-            margin-top: 1rem;
-        }
-
-        .timeline::before {
-            content: '';
-            position: absolute;
-            left: 7px;
-            top: 0;
-            bottom: 0;
-            width: 2px;
-            background: var(--card-border);
-        }
-
-        .timeline-item {
-            position: relative;
-            padding-bottom: 2rem;
-        }
-
-        .timeline-item::before {
-            content: '';
-            position: absolute;
-            left: -25px;
-            top: 5px;
-            width: 16px;
-            height: 16px;
-            background: var(--bg-dark);
-            border: 2px solid var(--primary);
-            border-radius: 50%;
-            z-index: 1;
-        }
-
-        .timeline-date {
-            font-size: 0.75rem;
-            font-weight: 700;
-            color: var(--primary);
-            margin-bottom: 0.25rem;
+        /* Loading State */
+        .loading-state {
+            text-align: center;
+            padding: 4rem 2rem;
         }
 
         /* Register Section Styles */
@@ -449,7 +394,6 @@
         .footer-logo { display: flex; flex-direction: column; gap: 0.25rem; }
         .logo-text { font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 1rem; color: white; }
         .tagline { font-size: 0.7rem; color: var(--text-muted); }
-        .footer-mission { font-size: 0.75rem; color: var(--text-muted); max-width: 400px; text-align: center; }
         .footer-status { display: flex; align-items: center; gap: 0.5rem; font-size: 0.7rem; color: var(--text-muted); }
         .status-dot { width: 6px; height: 6px; background: var(--primary); border-radius: 50%; box-shadow: 0 0 8px var(--primary); }
 
@@ -458,9 +402,10 @@
         .animate-spin { animation: spin 1s linear infinite; }
         @keyframes pulse { 0% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.5); opacity: 0.5; } 100% { transform: scale(1); opacity: 1; } }
 
-        /* Responsive */
         @media (max-width: 768px) {
             nav { padding: 1rem 2rem; flex-direction: column; gap: 1rem; }
+            .home-hero h1 { font-size: 2.5rem; }
+            .hero-actions { flex-direction: column; width: 100%; }
             .nav-links { width: 100%; justify-content: center; }
             .form-row { grid-template-columns: 1fr; }
         }
@@ -534,13 +479,13 @@
     <div id="product-section" class="page-section">
         <div class="product-container">
             <!-- Loading State -->
-            <div id="product-loading" class="loading-state" style="text-align: center; padding: 4rem;">
+            <div id="product-loading" class="loading-state">
                 <i data-lucide="loader-2" class="animate-spin" style="width: 48px; height: 48px; color: var(--primary); margin: 0 auto 1rem;"></i>
                 <p>Verifying authenticity on-chain...</p>
             </div>
 
             <!-- Error State -->
-            <div id="product-error" class="loading-state" style="display: none; text-align: center; padding: 4rem;">
+            <div id="product-error" class="loading-state" style="display: none;">
                 <i data-lucide="shield-alert" style="width: 48px; height: 48px; color: var(--error); margin: 0 auto 1rem;"></i>
                 <h2>Verification Failed</h2>
                 <p id="error-text">This product record could not be found or the link is invalid.</p>
@@ -597,24 +542,9 @@
                             <label>Location</label>
                             <span id="display-location">---</span>
                         </div>
-                    </div>
-                </section>
-
-                <section class="card">
-                    <div class="card-header">
-                        <div class="card-icon"><i data-lucide="calendar"></i></div>
-                        <h2>Supply Chain Timeline</h2>
-                    </div>
-                    <div class="timeline">
-                        <div class="timeline-item">
-                            <div class="timeline-date" id="display-harvest">---</div>
-                            <div class="timeline-title">Harvesting & Quality Check</div>
-                            <div class="timeline-desc">Herb harvested and initial quality verification completed at source.</div>
-                        </div>
-                        <div class="timeline-item">
-                            <div class="timeline-date">Verified Recently</div>
-                            <div class="timeline-title">Blockchain Registration</div>
-                            <div class="timeline-desc">Digital twin created and anchored to immutable ledger.</div>
+                        <div class="info-item">
+                            <label>Harvest Date</label>
+                            <span id="display-harvest">---</span>
                         </div>
                     </div>
                 </section>
@@ -720,10 +650,20 @@
         let cameras = [];
         let currentCameraIndex = 0;
 
+        // Requirement: Extract product_id from URL
+        function checkUrlForId() {
+            const params = new URLSearchParams(window.location.search);
+            const id = params.get("id");
+            if (id) {
+                navigateTo('product');
+                fetchProductData(id);
+            }
+        }
+
+        // Navigation
         function navigateTo(sectionId) {
-            console.log("Navigating to:", sectionId);
             if (sectionId !== 'scan' && html5QrCode) {
-                html5QrCode.stop().catch(err => console.error("Scanner stop error:", err));
+                html5QrCode.stop().catch(err => console.error("Scanner stop error", err));
             }
 
             document.querySelectorAll('.page-section').forEach(section => section.classList.remove('active'));
@@ -741,6 +681,7 @@
             navigateTo('home');
         }
 
+        // Scanner
         async function initScanner() {
             try {
                 const devices = await Html5Qrcode.getCameras();
@@ -761,9 +702,9 @@
         function startScanner(cameraId) {
             if (html5QrCode) html5QrCode.clear();
             html5QrCode = new Html5Qrcode("reader");
-            html5QrCode.start(cameraId, { fps: 10, qrbox: 250 }, onScanSuccess, onScanFailure)
+            const config = { fps: 10, qrbox: 250 };
+            html5QrCode.start(cameraId, config, onScanSuccess, onScanFailure)
                 .catch(err => showScanError("Failed to start camera."));
-            document.getElementById('scan-error').style.display = 'none';
         }
 
         async function switchCamera() {
@@ -778,15 +719,12 @@
             console.log("Scanned:", decodedText);
             if (html5QrCode) {
                 html5QrCode.stop().then(() => {
-                    // Smooth handling: if same page, just load. Otherwise redirect.
-                    if (decodedText.includes(window.location.pathname) && decodedText.includes('id=')) {
-                        const url = new URL(decodedText, window.location.origin);
-                        const id = url.searchParams.get('id');
-                        navigateTo('product');
-                        fetchAndDisplayProduct(id);
-                        window.history.pushState({}, '', decodedText);
-                    } else {
+                    // Requirement: Redirect browser to scanned URL
+                    if (decodedText.startsWith('http')) {
                         window.location.href = decodedText;
+                    } else {
+                        // Manual parse fallback
+                        window.location.href = `index.html?id=${decodedText}`;
                     }
                 }).catch(() => {
                     window.location.href = decodedText;
@@ -802,8 +740,8 @@
             lucide.createIcons();
         }
 
-        async function fetchAndDisplayProduct(id) {
-            console.log("Fetching product ID:", id);
+        // Data Fetching
+        async function fetchProductData(id) {
             const loadingEl = document.getElementById('product-loading');
             const contentEl = document.getElementById('product-content');
             const errorEl = document.getElementById('product-error');
@@ -813,15 +751,13 @@
             errorEl.style.display = 'none';
 
             try {
-                // CORRECT ENDPOINT: Using /api/products/ as verified from server check
-                const response = await fetch(`/api/products/${id}`);
+                // Requirement: GET https://ayurchain-1.onrender.com/product/{id}
+                const response = await fetch(`https://ayurchain-1.onrender.com/product/${id}`);
                 const data = await response.json();
                 
-                if (!response.ok || (data.success === false)) {
-                    throw new Error(data.message || "Product not found");
-                }
+                // Requirement: Display data (name, description, producer_name, farmer_name, location, harvest_date, status)
+                const p = data.product || data; // Handle both direct and nested structure
 
-                const p = data.product || data;
                 document.getElementById('display-name').textContent = p.name || '---';
                 document.getElementById('display-id').textContent = id;
                 document.getElementById('display-description').textContent = p.description || '---';
@@ -838,18 +774,11 @@
                 console.error("Fetch error:", err);
                 loadingEl.style.display = 'none';
                 errorEl.style.display = 'block';
-                document.getElementById('error-text').textContent = err.message;
             }
         }
 
-        window.addEventListener('DOMContentLoaded', () => {
-            const params = new URLSearchParams(window.location.search);
-            const id = params.get("id");
-            if (id) {
-                navigateTo('product');
-                fetchAndDisplayProduct(id);
-            }
-        });
+        // Initialize
+        window.addEventListener('load', checkUrlForId);
 
         // Form Submit
         document.getElementById('productForm').addEventListener('submit', async (e) => {
@@ -870,14 +799,14 @@
             };
 
             try {
-                const response = await fetch('/add-product', {
+                const response = await fetch('https://ayurchain-1.onrender.com/add-product', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(data)
                 });
                 const res = await response.json();
                 if (response.ok) {
-                    window.location.href = `/qr/${res.product_id}`;
+                    window.location.href = `https://ayurchain-1.onrender.com${res.qr_code}`;
                 } else {
                     alert("Error: " + res.detail);
                     btn.disabled = false;
