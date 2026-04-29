@@ -1,796 +1,126 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AyurChain | Cryptographically Rooted Authenticity</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js"></script>
+    <title>AyurChain - Register Product</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-        
-        :root {
-            --neon-green: #22c55e;
-            --dark-bg: #050505;
-            --glass-bg: rgba(255, 255, 255, 0.03);
-            --border-color: rgba(255, 255, 255, 0.1);
-        }
-
         body {
-            font-family: 'Inter', sans-serif;
-            background: var(--dark-bg);
-            color: #fff;
-            overflow-x: hidden;
+            background: #0d1117;
+            color: white;
+            font-family: Arial;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
         }
 
-        .neon-glow {
-            text-shadow: 0 0 20px rgba(34, 197, 94, 0.5);
+        .card {
+            background: #161b22;
+            padding: 30px;
+            border-radius: 15px;
+            width: 350px;
         }
 
-        .neon-border {
-            box-shadow: 0 0 15px rgba(34, 197, 94, 0.3);
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
         }
 
-        .glass {
-            background: var(--glass-bg);
-            backdrop-filter: blur(12px);
-            border: 1px solid var(--border-color);
+        input,
+        textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            border: none;
+            background: #0d1117;
+            color: white;
         }
 
-        .btn-pill {
-            border-radius: 9999px;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        button {
+            width: 100%;
+            padding: 12px;
+            border-radius: 10px;
+            background: #22c55e;
+            border: none;
+            color: black;
+            font-weight: bold;
+            cursor: pointer;
         }
 
-        .btn-primary {
-            background: var(--neon-green);
-            color: #000;
-            font-weight: 600;
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 0 25px rgba(34, 197, 94, 0.6);
-        }
-
-        .btn-ghost {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid var(--border-color);
-        }
-
-        .btn-ghost:hover {
-            background: rgba(255, 255, 255, 0.1);
-        }
-
-        .page-content {
-            display: none;
-            opacity: 0;
-            transform: translateY(20px);
-            transition: all 0.6s ease;
-        }
-
-        .page-content.active {
-            display: block;
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .stat-card {
-            border-right: 1px solid var(--border-color);
-        }
-
-        .stat-card:last-child {
-            border-right: none;
-        }
-
-        .workflow-card {
-            background: linear-gradient(145deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.01) 100%);
-            border: 1px solid var(--border-color);
-            transition: all 0.3s ease;
-        }
-
-        .workflow-card:hover {
-            border-color: rgba(34, 197, 94, 0.3);
-            background: rgba(34, 197, 94, 0.02);
-        }
-
-        .supply-chain-banner {
-            background: linear-gradient(90deg, rgba(5,5,5,1) 0%, rgba(34, 197, 94, 0.05) 50%, rgba(5,5,5,1) 100%);
-            border: 1px solid var(--border-color);
-        }
-
-        .input-dark {
-            background: rgba(255,255,255,0.02);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 12px 16px;
-            color: #fff;
-            transition: all 0.3s ease;
-        }
-
-        .input-dark:focus {
-            outline: none;
-            border-color: var(--neon-green);
-            background: rgba(255,255,255,0.05);
-        }
-
-        /* Animations */
-        @keyframes fade-in {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        .animate-fade {
-            animation: fade-in 1s ease-out;
+        button:hover {
+            background: #16a34a;
         }
     </style>
 </head>
-<body class="selection:bg-green-500/30">
 
-    <!-- NAVIGATION -->
-    <nav class="fixed top-0 w-full z-50 px-6 py-6 flex justify-center">
-        <div class="max-w-7xl w-full flex justify-between items-center bg-black/40 backdrop-blur-md rounded-full px-8 py-3 border border-white/5">
-            <div class="flex items-center gap-2 cursor-pointer" onclick="showPage('home')">
-                <div class="w-8 h-8 bg-green-500 rounded flex items-center justify-center">
-                    <i data-lucide="leaf" class="text-black w-5 h-5"></i>
-                </div>
-                <span class="text-xl font-bold tracking-tight">AyurChain</span>
-                <span class="text-[10px] text-neutral-500 ml-1">v2.4</span>
-            </div>
+<body>
 
-            <div class="flex items-center gap-8 text-sm font-medium">
-                <button onclick="showPage('home')" class="text-neutral-400 hover:text-white transition">Home</button>
-                <button id="navDashboardBtn" onclick="showPage('dashboard')" class="hidden text-neutral-400 hover:text-white transition">Portal</button>
-                
-                <div id="userProfile" class="hidden items-center gap-4">
-                    <span id="userNameDisplay" class="text-green-500 font-mono text-xs"></span>
-                    <button onclick="logout()" class="text-red-500/70 hover:text-red-500 transition">
-                        <i data-lucide="log-out" class="w-4 h-4"></i>
-                    </button>
-                </div>
+    <div class="card">
+        <h2>Register Product</h2>
 
-                <button id="navRegisterBtn" onclick="showPage('login')" class="bg-green-500/10 text-green-500 px-5 py-2 rounded-full border border-green-500/20 hover:bg-green-500 hover:text-black transition-all">
-                    Register
-                </button>
-            </div>
-        </div>
-    </nav>
+        <form id="productForm">
+            <input id="name" placeholder="Herb Name" required>
 
-    <!-- MAIN CONTENT -->
-    <main class="min-h-screen pt-32 pb-24 px-6 max-w-7xl mx-auto overflow-hidden">
+            <input id="producer_name" placeholder="Producer Name" required>
 
-        <!-- HOME PAGE (IMAGE MATCH) -->
-        <section id="page-home" class="page-content active">
-            
-            <!-- Hero section matching the image -->
-            <div class="text-center mt-20 mb-32 animate-fade">
-                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-green-500/5 border border-green-500/10 text-[10px] font-bold tracking-[0.2em] text-green-500 mb-8 uppercase">
-                    <span class="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></span>
-                    Live • Verified Supply Chain
-                </div>
-                <h1 class="text-7xl md:text-8xl font-bold tracking-tight mb-8 leading-[1.1]">
-                    Authenticity, <br>
-                    <span class="text-green-500 neon-glow">cryptographically <br> rooted.</span>
-                </h1>
-                <p class="text-neutral-500 text-lg md:text-xl max-w-2xl mx-auto mb-12 leading-relaxed">
-                    Every Ayurvedic herb gets a tamper-proof digital identity. Producers register the journey. Buyers scan one QR to verify the source.
-                </p>
-                
-                <div class="flex flex-wrap justify-center gap-4 mb-20">
-                    <button onclick="showPage('dashboard')" class="btn-pill btn-primary px-10 py-4 flex items-center gap-2">
-                        Register Product <i data-lucide="arrow-right" class="w-4 h-4"></i>
-                    </button>
-                    <button onclick="startScanner()" class="btn-pill btn-ghost px-10 py-4 font-medium text-neutral-300">
-                        Scan QR
-                    </button>
-                </div>
+            <input id="producer_id" placeholder="Producer ID" required>
 
-                <!-- Stats Bar -->
-                <div class="max-w-3xl mx-auto glass rounded-2xl flex overflow-hidden">
-                    <div class="flex-1 p-8 stat-card">
-                        <div class="text-3xl font-bold mb-1">100%</div>
-                        <div class="text-[10px] text-neutral-500 uppercase tracking-widest">On-chain provenance</div>
-                    </div>
-                    <div class="flex-1 p-8 stat-card">
-                        <div class="text-3xl font-bold mb-1">&lt;1s</div>
-                        <div class="text-[10px] text-neutral-500 uppercase tracking-widest">Verification time</div>
-                    </div>
-                    <div class="flex-1 p-8 stat-card">
-                        <div class="text-3xl font-bold mb-1">0</div>
-                        <div class="text-[10px] text-neutral-500 uppercase tracking-widest">Trust assumptions</div>
-                    </div>
-                </div>
-            </div>
+            <input id="farmer_name" placeholder="Farmer Name">
 
-            <!-- Workflow Section -->
-            <div class="mb-40">
-                <div class="text-center mb-16">
-                    <span class="text-[10px] font-bold tracking-[0.3em] text-green-500 uppercase">/ Workflow</span>
-                    <h2 class="text-4xl font-bold mt-4">Three steps to trust</h2>
-                    <p class="text-neutral-500 mt-2">From the farmer's hands to the buyer's scan — one continuous verifiable chain.</p>
-                </div>
+            <input id="location" placeholder="Location">
 
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <div class="workflow-card p-10 rounded-2xl relative group">
-                        <span class="absolute top-8 right-8 text-neutral-800 text-xs font-mono">#01</span>
-                        <div class="w-12 h-12 bg-green-500/10 rounded-lg flex items-center justify-center mb-8 border border-green-500/20 group-hover:bg-green-500 group-hover:text-black transition-all">
-                            <i data-lucide="pen-tool" class="w-6 h-6"></i>
-                        </div>
-                        <h3 class="text-xl font-bold mb-4">Producer registers</h3>
-                        <p class="text-neutral-500 leading-relaxed text-sm">Farmer ID, herb data, photos and timeline are signed and stored.</p>
-                    </div>
-                    <div class="workflow-card p-10 rounded-2xl relative group">
-                        <span class="absolute top-8 right-8 text-neutral-800 text-xs font-mono">#02</span>
-                        <div class="w-12 h-12 bg-green-500/10 rounded-lg flex items-center justify-center mb-8 border border-green-500/20 group-hover:bg-green-500 group-hover:text-black transition-all">
-                            <i data-lucide="qr-code" class="w-6 h-6"></i>
-                        </div>
-                        <h3 class="text-xl font-bold mb-4">QR is generated</h3>
-                        <p class="text-neutral-500 leading-relaxed text-sm">A unique cryptographic QR is created for each batch and printed on packaging.</p>
-                    </div>
-                    <div class="workflow-card p-10 rounded-2xl relative group">
-                        <span class="absolute top-8 right-8 text-neutral-800 text-xs font-mono">#03</span>
-                        <div class="w-12 h-12 bg-green-500/10 rounded-lg flex items-center justify-center mb-8 border border-green-500/20 group-hover:bg-green-500 group-hover:text-black transition-all">
-                            <i data-lucide="shield-check" class="w-6 h-6"></i>
-                        </div>
-                        <h3 class="text-xl font-bold mb-4">Buyer scans</h3>
-                        <p class="text-neutral-500 leading-relaxed text-sm">One scan opens the verified record — origin, journey, integrity.</p>
-                    </div>
-                </div>
-            </div>
+            <input type="date" id="harvest_date">
 
-            <!-- Supply Chain Banner -->
-            <div class="supply-chain-banner rounded-[40px] p-12 md:p-20 relative overflow-hidden group">
-                <div class="relative z-10">
-                    <span class="text-[10px] font-bold tracking-[0.3em] text-green-500 uppercase">/ Supply Chain</span>
-                    <h2 class="text-5xl font-bold mt-6 mb-4">Every stage, on every label.</h2>
-                    <p class="text-neutral-400 mb-12 max-w-lg">Buyers witness the full path — harvest, processing, packaging, delivery.</p>
+            <textarea id="description" placeholder="Description"></textarea>
 
-                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-16">
-                        <div class="glass p-6 rounded-2xl flex flex-col justify-between aspect-square md:aspect-auto">
-                            <span class="text-neutral-700 text-[10px] font-mono">01</span>
-                            <div>
-                                <i data-lucide="sprout" class="w-5 h-5 text-green-500 mb-3"></i>
-                                <h4 class="text-sm font-bold">Harvest</h4>
-                            </div>
-                        </div>
-                        <div class="glass p-6 rounded-2xl flex flex-col justify-between">
-                            <span class="text-neutral-700 text-[10px] font-mono">02</span>
-                            <div>
-                                <i data-lucide="zap" class="w-5 h-5 text-green-500 mb-3"></i>
-                                <h4 class="text-sm font-bold">Processing</h4>
-                            </div>
-                        </div>
-                        <div class="glass p-6 rounded-2xl flex flex-col justify-between">
-                            <span class="text-neutral-700 text-[10px] font-mono">03</span>
-                            <div>
-                                <i data-lucide="package" class="w-5 h-5 text-green-500 mb-3"></i>
-                                <h4 class="text-sm font-bold">Packaging</h4>
-                            </div>
-                        </div>
-                        <div class="glass p-6 rounded-2xl flex flex-col justify-between">
-                            <span class="text-neutral-700 text-[10px] font-mono">04</span>
-                            <div>
-                                <i data-lucide="truck" class="w-5 h-5 text-green-500 mb-3"></i>
-                                <h4 class="text-sm font-bold">Delivered</h4>
-                            </div>
-                        </div>
-                    </div>
-
-                    <button onclick="showPage('login')" class="btn-pill btn-primary px-10 py-4 flex items-center gap-2">
-                        Get started — it's free <i data-lucide="arrow-right" class="w-4 h-4"></i>
-                    </button>
-                </div>
-                
-                <!-- Background decoration -->
-                <div class="absolute -right-20 -bottom-20 w-80 h-80 bg-green-500/10 blur-[100px] rounded-full group-hover:bg-green-500/20 transition-all duration-700"></div>
-            </div>
-        </section>
-
-        <!-- LOGIN PAGE -->
-        <section id="page-login" class="page-content">
-            <div class="max-w-md mx-auto">
-                <div class="text-center mb-10">
-                    <h2 class="text-4xl font-bold mb-4">Portal Access</h2>
-                    <p class="text-neutral-500">Sign in to your producer dashboard</p>
-                </div>
-                <div class="glass p-10 rounded-[32px] border-white/5">
-                    <form id="loginForm" class="space-y-6">
-                        <div>
-                            <label class="block text-xs font-bold text-neutral-500 uppercase tracking-widest mb-2">Full Name</label>
-                            <input type="text" id="loginName" required placeholder="Enter producer name" class="input-dark w-full">
-                        </div>
-                        <div>
-                            <label class="block text-xs font-bold text-neutral-500 uppercase tracking-widest mb-2">Producer ID</label>
-                            <input type="text" id="loginId" required placeholder="e.g. PRD-8492" class="input-dark w-full">
-                        </div>
-                        <button type="submit" class="btn-pill btn-primary w-full py-4 text-lg">
-                            Continue to Dashboard
-                        </button>
-                    </form>
-                </div>
-            </div>
-        </section>
-
-        <!-- DASHBOARD PAGE -->
-        <section id="page-dashboard" class="page-content">
-            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
-                
-                <!-- Sidebar Control -->
-                <div class="lg:col-span-4">
-                    <div class="glass p-8 rounded-[32px] border-white/5 sticky top-32">
-                        <div class="flex items-center gap-3 mb-8">
-                            <div class="w-10 h-10 bg-green-500/10 rounded-lg flex items-center justify-center text-green-500">
-                                <i data-lucide="plus-circle" class="w-6 h-6"></i>
-                            </div>
-                            <h2 class="text-xl font-bold">Register Batch</h2>
-                        </div>
-                        
-                        <form id="productForm" class="space-y-5">
-                            <div class="space-y-2">
-                                <label class="text-[10px] font-bold text-neutral-500 uppercase tracking-widest">Herb Detail</label>
-                                <input type="text" name="name" required placeholder="e.g. Ashwagandha Root" class="input-dark w-full text-sm">
-                            </div>
-                            <div class="space-y-2">
-                                <label class="text-[10px] font-bold text-neutral-500 uppercase tracking-widest">Cultivator</label>
-                                <input type="text" name="farmerName" required placeholder="Farmer name" class="input-dark w-full text-sm">
-                            </div>
-                            <div class="grid grid-cols-2 gap-4">
-                                <div class="space-y-2">
-                                    <label class="text-[10px] font-bold text-neutral-500 uppercase tracking-widest">Harvest</label>
-                                    <input type="date" name="harvestDate" required class="input-dark w-full text-xs">
-                                </div>
-                                <div class="space-y-2">
-                                    <label class="text-[10px] font-bold text-neutral-500 uppercase tracking-widest">Region</label>
-                                    <input type="text" name="location" required placeholder="e.g. Pune" class="input-dark w-full text-sm">
-                                </div>
-                            </div>
-                            <div class="space-y-2">
-                                <label class="text-[10px] font-bold text-neutral-500 uppercase tracking-widest">Description</label>
-                                <textarea name="description" rows="3" placeholder="Batch details..." class="input-dark w-full text-sm resize-none"></textarea>
-                            </div>
-                            <button type="submit" class="btn-pill btn-primary w-full py-4 mt-2 flex items-center justify-center gap-2">
-                                <i data-lucide="save" class="w-4 h-4"></i> Create Record
-                            </button>
-                        </form>
-                    </div>
-                </div>
-
-                <!-- Main Content Area -->
-                <div class="lg:col-span-8">
-                    <div class="flex justify-between items-center mb-10">
-                        <div>
-                            <h2 class="text-3xl font-bold">Active Inventory</h2>
-                            <p class="text-neutral-500 text-sm mt-1">Managed cryptographical records for your supply chain.</p>
-                        </div>
-                        <div class="px-4 py-2 glass rounded-full text-xs font-mono">
-                            <span id="batchCount" class="text-green-500">0</span> RECORDS
-                        </div>
-                    </div>
-
-                    <div id="productGrid" class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <!-- Products will be injected here -->
-                    </div>
-                </div>
-            </div>
-        </section>
-
-    </main>
-
-    <!-- FOOTER -->
-    <footer class="border-t border-white/5 py-16 px-6">
-        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
-            <div class="flex flex-col gap-2">
-                <div class="flex items-center gap-2">
-                    <div class="w-6 h-6 bg-green-500 rounded-sm flex items-center justify-center">
-                        <i data-lucide="leaf" class="text-black w-4 h-4"></i>
-                    </div>
-                    <span class="font-bold tracking-tight">AyurChain</span>
-                </div>
-                <p class="text-[10px] text-neutral-600 uppercase tracking-widest">trace.trust.verify</p>
-            </div>
-            
-            <p class="text-neutral-600 text-xs max-w-xs text-center md:text-left leading-relaxed">
-                Verifiable Ayurvedic herb traceability — from soil to shelf, signed and sealed.
-            </p>
-
-            <div class="flex items-center gap-6 text-neutral-500 text-[10px] font-mono">
-                <span class="flex items-center gap-1.5"><span class="w-1.5 h-1.5 bg-green-500 rounded-full"></span> operational</span>
-                <span>© 2026 - ayurchain</span>
-            </div>
-        </div>
-    </footer>
-
-    <!-- MODALS (QR/SCANNER) -->
-    <div id="qrModal" class="fixed inset-0 z-[100] hidden flex items-center justify-center p-6 bg-black/90 backdrop-blur-md">
-        <div class="glass max-w-sm w-full p-10 rounded-[48px] text-center relative border-white/10">
-            <button onclick="closeModal()" class="absolute top-8 right-8 text-neutral-500 hover:text-white">
-                <i data-lucide="x" class="w-6 h-6"></i>
-            </button>
-            <h3 id="qrName" class="text-2xl font-bold mb-1"></h3>
-            <p id="qrId" class="text-[10px] text-neutral-500 font-mono mb-8 uppercase tracking-widest"></p>
-            
-            <div id="qrcode" class="bg-white p-6 rounded-[32px] inline-block mb-10 shadow-[0_0_50px_rgba(34,197,94,0.15)]">
-                <!-- QR Image -->
-            </div>
-
-            <button onclick="window.print()" class="w-full py-4 glass rounded-2xl font-bold text-sm flex items-center justify-center gap-2 hover:bg-white/5 transition-all">
-                <i data-lucide="printer" class="w-4 h-4"></i> Print Digital Label
-            </button>
-        </div>
-    </div>
-
-    <div id="scannerModal" class="fixed inset-0 z-[100] hidden flex items-center justify-center p-6 bg-black/95">
-        <div class="max-w-lg w-full flex flex-col items-center">
-            <div class="relative w-full aspect-square rounded-[40px] overflow-hidden mb-8 border border-white/10">
-                <video id="scannerVideo" class="w-full h-full object-cover"></video>
-                <div class="absolute inset-0 border-[60px] border-black/60 pointer-events-none"></div>
-                <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 border border-green-500/50 rounded-3xl shadow-[0_0_100px_rgba(34,197,94,0.2)]"></div>
-            </div>
-            <button onclick="closeScanner()" class="btn-pill btn-ghost px-10 py-3 text-sm font-medium text-neutral-400">
-                Close Scanner
-            </button>
-        </div>
-    </div>
-
-    <!-- VERIFICATION MODAL -->
-    <div id="verifyModal" class="fixed inset-0 z-[110] hidden flex items-center justify-center p-6 bg-black/90 backdrop-blur-xl">
-        <div class="glass max-w-xl w-full p-12 rounded-[48px] relative border-white/10">
-            <button onclick="closeVerifyModal()" class="absolute top-10 right-10 text-neutral-500 hover:text-white">
-                <i data-lucide="x" class="w-6 h-6"></i>
-            </button>
-            
-            <div id="verifyLoading" class="py-20 text-center">
-                <i data-lucide="shield" class="w-16 h-16 text-green-500 mx-auto mb-6 animate-pulse"></i>
-                <h3 class="text-2xl font-bold">Verifying Record...</h3>
-                <p class="text-neutral-500 mt-2">Connecting to AyurChain node</p>
-            </div>
-
-            <div id="verifyContent" class="hidden">
-                <div class="flex items-center gap-4 mb-10">
-                    <div class="w-14 h-14 bg-green-500 rounded-2xl flex items-center justify-center shadow-[0_0_30px_rgba(34,197,94,0.3)]">
-                        <i data-lucide="shield-check" class="text-black w-8 h-8"></i>
-                    </div>
-                    <div>
-                        <h3 class="text-3xl font-bold">Authentic Record</h3>
-                        <p class="text-green-500 text-xs font-mono tracking-widest uppercase">Cryptographically Verified</p>
-                    </div>
-                </div>
-
-                <div class="space-y-6 mb-10">
-                    <div class="grid grid-cols-2 gap-8">
-                        <div>
-                            <p class="text-[10px] text-neutral-500 uppercase tracking-widest font-bold mb-1">Herb Type</p>
-                            <p id="vName" class="text-lg font-bold"></p>
-                        </div>
-                        <div>
-                            <p class="text-[10px] text-neutral-500 uppercase tracking-widest font-bold mb-1">Producer</p>
-                            <p id="vProducer" class="text-lg font-bold"></p>
-                        </div>
-                    </div>
-                    <div class="grid grid-cols-2 gap-8">
-                        <div>
-                            <p class="text-[10px] text-neutral-500 uppercase tracking-widest font-bold mb-1">Harvest Date</p>
-                            <p id="vDate" class="text-lg font-bold"></p>
-                        </div>
-                        <div>
-                            <p class="text-[10px] text-neutral-500 uppercase tracking-widest font-bold mb-1">Status</p>
-                            <p id="vStatus" class="text-green-500 font-bold"></p>
-                        </div>
-                    </div>
-                    <div>
-                        <p class="text-[10px] text-neutral-500 uppercase tracking-widest font-bold mb-1">Blockchain ID</p>
-                        <p id="vId" class="text-[10px] text-neutral-400 font-mono break-all"></p>
-                    </div>
-                </div>
-
-                <button onclick="closeVerifyModal()" class="w-full py-4 btn-primary rounded-2xl font-bold text-sm">
-                    Done
-                </button>
-            </div>
-
-            <div id="verifyError" class="hidden py-20 text-center">
-                <i data-lucide="alert-octagon" class="w-16 h-16 text-red-500 mx-auto mb-6"></i>
-                <h3 class="text-2xl font-bold">Verification Failed</h3>
-                <p class="text-neutral-500 mt-2">No matching cryptographic record found in the registry.</p>
-                <button onclick="closeVerifyModal()" class="mt-8 px-8 py-3 glass rounded-full text-sm font-bold">Close</button>
-            </div>
-        </div>
+            <button type="submit">Generate QR</button>
+        </form>
     </div>
 
     <script>
-        lucide.createIcons();
-
-        // Smart API detection: Use relative paths if served from the same server
-        const API_BASE = (window.location.protocol === 'http:' || window.location.protocol === 'https:')
-            ? "" 
-            : "http://localhost:8000";
-
-        let products = [];
-        let currentUser = JSON.parse(localStorage.getItem('ayurchain_user') || 'null');
-
-        function showPage(pageId) {
-            if (pageId === 'dashboard' && !currentUser) {
-                pageId = 'login';
-            }
-
-            document.querySelectorAll('.page-content').forEach(p => p.classList.remove('active'));
-            const target = document.getElementById(`page-${pageId}`);
-            if (target) {
-                target.classList.add('active');
-                if (pageId === 'dashboard') {
-                    loadProducts();
-                }
-            }
-
-            updateNavUI();
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-
-        function updateNavUI() {
-            const profile = document.getElementById('userProfile');
-            const regBtn = document.getElementById('navRegisterBtn');
-            const dashBtn = document.getElementById('navDashboardBtn');
-            const nameDisp = document.getElementById('userNameDisplay');
-
-            if (currentUser) {
-                profile.classList.replace('hidden', 'flex');
-                dashBtn.classList.remove('hidden');
-                regBtn.classList.add('hidden');
-                if (nameDisp) nameDisp.innerText = `@${currentUser.id.toLowerCase()}`;
-            } else {
-                profile.classList.replace('flex', 'hidden');
-                dashBtn.classList.add('hidden');
-                regBtn.classList.remove('hidden');
-            }
-        }
-
-        document.getElementById('loginForm').onsubmit = (e) => {
+        document.getElementById("productForm").addEventListener("submit", async (e) => {
             e.preventDefault();
-            const name = document.getElementById('loginName').value;
-            const id = document.getElementById('loginId').value;
-            currentUser = { name, id };
-            localStorage.setItem('ayurchain_user', JSON.stringify(currentUser));
-            showPage('dashboard');
-        };
 
-        async function loadProducts() {
-            if (!currentUser) return;
-            try {
-                const res = await fetch(`${API_BASE}/products?producer_id=${currentUser.id}`);
-                if (!res.ok) throw new Error("Fetch failed");
-                const data = await res.json();
-                products = data.map(p => ({
-                    id: p.id,
-                    name: p.name,
-                    farmer_name: p.farmer_name,
-                    harvest_date: p.harvest_date,
-                    qr_url: `/qr/${p.id}`
-                }));
-                renderDashboard();
-            } catch (err) {
-                console.error("Error loading products:", err);
-            }
-        }
-
-        function logout() {
-            currentUser = null;
-            localStorage.removeItem('ayurchain_user');
-            showPage('home');
-        }
-
-        document.getElementById('productForm').onsubmit = async (e) => {
-            e.preventDefault();
-            const submitBtn = e.target.querySelector('button[type="submit"]');
-            const originalHtml = submitBtn.innerHTML;
-            
-            submitBtn.disabled = true;
-            submitBtn.innerHTML = '<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i>';
-            lucide.createIcons();
-
-            const data = new FormData(e.target);
-            const payload = {
-                name: data.get('name'),
-                description: data.get('description'),
-                producer_name: currentUser.name,
-                producer_id: currentUser.id,
-                farmer_name: data.get('farmerName'),
-                location: data.get('location'),
-                harvest_date: data.get('harvestDate'),
+            const data = {
+                name: document.getElementById("name").value,
+                description: document.getElementById("description").value,
+                producer_name: document.getElementById("producer_name").value,
+                producer_id: document.getElementById("producer_id").value,
+                farmer_name: document.getElementById("farmer_name").value,
+                location: document.getElementById("location").value,
+                harvest_date: document.getElementById("harvest_date").value,
                 status: "Verified"
             };
 
             try {
-                const response = await fetch(`${API_BASE}/add-product`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
+                const res = await fetch("https://ayurchain-1.onrender.com/add-product", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(data)
                 });
 
-                if (!response.ok) throw new Error("API error");
-                const res = await response.json();
+                const result = await res.json();
 
-                products.unshift({
-                    id: res.product_id,
-                    name: payload.name,
-                    farmer_name: payload.farmer_name,
-                    harvest_date: payload.harvest_date,
-                    qr_url: res.qr_code
-                });
+                if (res.ok) {
+                    alert("✅ Product Added!");
 
-                renderDashboard();
-                e.target.reset();
-                viewQR(res.product_id, payload.name, res.qr_code);
+                    // open QR
+                    window.open(`https://ayurchain-1.onrender.com${result.qr_code}`, "_blank");
+
+                } else {
+                    alert("❌ " + result.detail);
+                }
 
             } catch (err) {
-                alert(`Connection failed: ${err.message}. Ensure backend is running at :8000`);
+                alert("❌ Server Error");
                 console.error(err);
-            } finally {
-                submitBtn.disabled = false;
-                submitBtn.innerHTML = originalHtml;
-                lucide.createIcons();
             }
-        };
-
-        function renderDashboard() {
-            const grid = document.getElementById('productGrid');
-            const count = document.getElementById('batchCount');
-            if (!grid) return;
-
-            count.innerText = products.length;
-
-            if (products.length === 0) {
-                grid.innerHTML = `
-                    <div class="col-span-full py-32 glass rounded-[40px] text-center border-dashed border-white/10">
-                        <i data-lucide="box" class="w-12 h-12 text-neutral-800 mx-auto mb-6"></i>
-                        <h3 class="text-xl font-bold mb-2">No active records</h3>
-                        <p class="text-neutral-500 text-sm">Register your first batch to start tracking.</p>
-                    </div>
-                `;
-                lucide.createIcons();
-                return;
-            }
-
-            grid.innerHTML = products.map(p => `
-                <div class="glass p-8 rounded-[32px] group hover:border-green-500/30 transition-all duration-500">
-                    <div class="flex justify-between items-start mb-8">
-                        <div>
-                            <h3 class="text-lg font-bold group-hover:text-green-500 transition">${p.name}</h3>
-                            <p class="text-[10px] text-neutral-600 font-mono mt-1 uppercase tracking-widest">${p.id}</p>
-                        </div>
-                        <div class="w-2 h-2 rounded-full bg-green-500 neon-glow"></div>
-                    </div>
-                    
-                    <div class="space-y-3 mb-10">
-                        <div class="flex items-center gap-3 text-xs text-neutral-500">
-                            <i data-lucide="user" class="w-3.5 h-3.5"></i>
-                            <span>${p.farmer_name}</span>
-                        </div>
-                        <div class="flex items-center gap-3 text-xs text-neutral-500">
-                            <i data-lucide="calendar" class="w-3.5 h-3.5"></i>
-                            <span>${p.harvest_date}</span>
-                        </div>
-                    </div>
-
-                    <div class="flex gap-2">
-                        <button onclick="viewQR('${p.id}','${p.name}','/qr/${p.id}')" class="flex-1 py-3 glass rounded-xl text-[10px] font-bold tracking-widest hover:bg-white/5 flex items-center justify-center gap-2">
-                            <i data-lucide="qr-code" class="w-3.5 h-3.5"></i> QR
-                        </button>
-                        <button onclick="verifyItem('${p.id}')" class="flex-1 py-3 bg-green-500/10 text-green-500 rounded-xl text-[10px] font-bold tracking-widest hover:bg-green-500/20 flex items-center justify-center gap-2 transition-colors">
-                            <i data-lucide="shield-check" class="w-3.5 h-3.5"></i> VERIFY
-                        </button>
-                    </div>
-                </div>
-            `).join('');
-            lucide.createIcons();
-        }
-
-        function viewQR(id, name, url) {
-            document.getElementById('qrName').innerText = name;
-            document.getElementById('qrId').innerText = id;
-            document.getElementById('qrcode').innerHTML = `<img src="${API_BASE}${url}" class="w-48 h-48" alt="Batch QR">`;
-            document.getElementById('qrModal').classList.remove('hidden');
-        }
-
-        function closeModal() {
-            document.getElementById('qrModal').classList.add('hidden');
-        }
-
-        async function verifyItem(id) {
-            const modal = document.getElementById('verifyModal');
-            const loading = document.getElementById('verifyLoading');
-            const content = document.getElementById('verifyContent');
-            const error = document.getElementById('verifyError');
-
-            modal.classList.remove('hidden');
-            loading.classList.remove('hidden');
-            content.classList.add('hidden');
-            error.classList.add('hidden');
-            lucide.createIcons();
-
-            try {
-                const res = await fetch(`${API_BASE}/product/${id}`);
-                if (!res.ok) throw new Error();
-                const data = await res.json();
-
-                document.getElementById('vName').innerText = data.name;
-                document.getElementById('vProducer').innerText = data.producer_name;
-                document.getElementById('vDate').innerText = data.harvest_date;
-                document.getElementById('vStatus').innerText = data.status;
-                document.getElementById('vId').innerText = id;
-
-                loading.classList.add('hidden');
-                content.classList.remove('hidden');
-            } catch {
-                loading.classList.add('hidden');
-                error.classList.remove('hidden');
-            }
-            lucide.createIcons();
-        }
-
-        function closeVerifyModal() {
-            document.getElementById('verifyModal').classList.add('hidden');
-        }
-
-        let videoStream = null;
-        function startScanner() {
-            document.getElementById('scannerModal').classList.remove('hidden');
-            const video = document.getElementById('scannerVideo');
-            navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } })
-                .then(stream => {
-                    videoStream = stream;
-                    video.srcObject = stream;
-                    video.play();
-                    requestAnimationFrame(tick);
-                }).catch(() => {
-                    alert("Camera restricted.");
-                    closeScanner();
-                });
-        }
-
-        function tick() {
-            const video = document.getElementById('scannerVideo');
-            if (video && video.readyState === video.HAVE_ENOUGH_DATA) {
-                const canvas = document.createElement("canvas");
-                canvas.height = video.videoHeight;
-                canvas.width = video.videoWidth;
-                const ctx = canvas.getContext("2d");
-                ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-                const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-                const code = jsQR(imageData.data, imageData.width, imageData.height);
-                if (code) {
-                    let productId = code.data;
-                    try {
-                        const url = new URL(code.data);
-                        // Try param ?id=...
-                        productId = url.searchParams.get("id");
-                        // Fallback: Try last segment of path /product/ID
-                        if (!productId) {
-                            const segments = url.pathname.split('/');
-                            productId = segments[segments.length - 1];
-                        }
-                    } catch (e) {
-                        // Not a URL, use raw data
-                        productId = code.data;
-                    }
-
-                    if (productId) {
-                        closeScanner();
-                        verifyItem(productId);
-                        return;
-                    }
-                }
-            }
-            if (videoStream) requestAnimationFrame(tick);
-        }
-
-        function closeScanner() {
-            if (videoStream) videoStream.getTracks().forEach(t => t.stop());
-            videoStream = null;
-            document.getElementById('scannerModal').classList.add('hidden');
-        }
-
-        updateNavUI();
+        });
     </script>
+
 </body>
+
 </html>
