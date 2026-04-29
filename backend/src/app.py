@@ -22,7 +22,7 @@ app.add_middleware(
 )
 
 # Ensure folders exist BEFORE mounting
-QR_DIR = "static/qrcodes"
+QR_DIR = os.path.join(os.getcwd(), "../../static/qrcodes")
 os.makedirs(QR_DIR, exist_ok=True)
 
 # Mount static
