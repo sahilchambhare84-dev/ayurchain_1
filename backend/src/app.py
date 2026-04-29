@@ -30,7 +30,10 @@ QR_DIR = os.path.join(tempfile.gettempdir(), "qrcodes")
 os.makedirs(QR_DIR, exist_ok=True)
 
 # Serve frontend files
-app.mount("/static", StaticFiles(directory="static"), name="static")
+BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../"))
+STATIC_DIR = os.path.join(BASE_DIR, "static")
+
+app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
 
 # ── FIREBASE SETUP ─────────────────────────
 
