@@ -595,14 +595,30 @@
         }
 
         function onScanSuccess(decodedText, decodedResult) {
-            // Check if it's a valid URL
+            console.log("Scanned Result:", decodedText);
+            
+            // 1. If it's a full URL (possibly from an old QR or external source)
             if (decodedText.startsWith('http')) {
-                // Success! Redirect to the product URL
                 html5QrcodeScanner.clear();
                 window.location.href = decodedText;
-            } else {
-                showScanError("Invalid QR Code: Does not contain a valid verification link.");
+                return;
             }
+
+            // 2. If it's a path (e.g. /static/product.html?id=...)
+            if (decodedText.startsWith('/')) {
+                html5QrcodeScanner.clear();
+                window.location.href = window.location.origin + decodedText;
+                return;
+            }
+
+            // 3. If it's just a product ID
+            if (decodedText && decodedText.length > 5) {
+                html5QrcodeScanner.clear();
+                window.location.href = `/static/product.html?id=${decodedText}`;
+                return;
+            }
+
+            showScanError("Invalid QR Code format.");
         }
 
         function onScanFailure(error) {

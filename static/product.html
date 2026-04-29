@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verify Product | AyurChain</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        :root {
+            --bg-dark: #05070a;
+            --card-bg: #0f1218;
+            --card-border: #1e2631;
+            --primary: #22c55e;
+            --primary-glow: rgba(34, 197, 94, 0.3);
+            --text-main: #e2e8f0;
+            --text-muted: #94a3b8;
+            --input-bg: #0a0d12;
+            --error: #ef4444;
+            --success: #22c55e;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        nav {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 1.5rem;
+            background: rgba(5, 7, 10, 0.8);
+            backdrop-filter: blur(12px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid var(--card-border);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 700;
+            font-size: 1.25rem;
+            color: white;
+            text-decoration: none;
+        }
+
+        .logo span {
+            color: var(--primary);
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+        }
+
+        .loading-state, .error-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            display: none;
+        }
+
+        .error-state i {
+            color: var(--error);
+            width: 48px;
+            height: 48px;
+            margin-bottom: 1rem;
+        }
+
+        .product-content {
+            display: none;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Verification Badge */
+        .verify-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .verify-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(34, 197, 94, 0.1);
+            color: var(--primary);
+            padding: 0.75rem 1.5rem;
+            border-radius: 99px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            border: 1px solid var(--primary);
+            box-shadow: 0 0 20px var(--primary-glow);
+            margin-bottom: 1.5rem;
+        }
+
+        h1 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .product-id {
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            font-family: monospace;
+        }
+
+        /* Sections */
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid var(--card-border);
+            padding-bottom: 1rem;
+        }
+
+        .card-icon {
+            background: rgba(34, 197, 94, 0.1);
+            color: var(--primary);
+            padding: 0.5rem;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .card h2 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.25rem;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .info-item label {
+            display: block;
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            margin-bottom: 0.25rem;
+        }
+
+        .info-item span {
+            font-weight: 500;
+            color: white;
+        }
+
+        .description-text {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            line-height: 1.7;
+        }
+
+        /* Timeline */
+        .timeline {
+            position: relative;
+            padding-left: 2rem;
+            margin-top: 1rem;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 7px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: var(--card-border);
+        }
+
+        .timeline-item {
+            position: relative;
+            padding-bottom: 2rem;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -25px;
+            top: 5px;
+            width: 16px;
+            height: 16px;
+            background: var(--bg-dark);
+            border: 2px solid var(--primary);
+            border-radius: 50%;
+            z-index: 1;
+        }
+
+        .timeline-date {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 0.25rem;
+        }
+
+        .timeline-title {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .timeline-desc {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        /* Buttons */
+        .btn-outline {
+            background: transparent;
+            color: white;
+            border: 1px solid var(--card-border);
+            padding: 1rem 2rem;
+            border-radius: 99px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+            justify-content: center;
+            margin-top: 2rem;
+        }
+
+        .btn-outline:hover {
+            border-color: white;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .animate-spin {
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* Image Gallery placeholder */
+        .image-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .image-placeholder {
+            aspect-ratio: 1;
+            background: var(--input-bg);
+            border: 1px dashed var(--card-border);
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-muted);
+            font-size: 0.75rem;
+            gap: 0.5rem;
+        }
+
+        @media (max-width: 600px) {
+            h1 { font-size: 1.75rem; }
+            .card { padding: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <a href="/static/index.html" class="logo">
+            <i data-lucide="leaf"></i>
+            AyurChain <span>v1.0</span>
+        </a>
+    </nav>
+
+    <div class="container">
+        <!-- Loading State -->
+        <div id="loading" class="loading-state" style="display: block;">
+            <i data-lucide="loader-2" class="animate-spin" style="width: 48px; height: 48px; color: var(--primary); margin: 0 auto 1rem;"></i>
+            <p>Verifying authenticity on-chain...</p>
+        </div>
+
+        <!-- Error State -->
+        <div id="error" class="error-state">
+            <i data-lucide="shield-alert"></i>
+            <h2 id="error-title">Verification Failed</h2>
+            <p id="error-msg">This product record could not be found or has been tampered with.</p>
+            <a href="/static/index.html" class="btn-outline">
+                <i data-lucide="arrow-left"></i> Back to Scanner
+            </a>
+        </div>
+
+        <!-- Product Content -->
+        <div id="product-content" class="product-content">
+            <div class="verify-header">
+                <div class="verify-badge">
+                    <i data-lucide="shield-check"></i>
+                    AUTHENTICITY VERIFIED
+                </div>
+                <h1 id="herb-name">---</h1>
+                <p class="product-id">ID: <span id="display-id">---</span></p>
+            </div>
+
+            <!-- Herb Details -->
+            <section class="card">
+                <div class="card-header">
+                    <div class="card-icon"><i data-lucide="leaf"></i></div>
+                    <h2>Herb Details</h2>
+                </div>
+                <div class="info-item" style="margin-bottom: 1.5rem;">
+                    <label>Description</label>
+                    <p class="description-text" id="herb-description">---</p>
+                </div>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <label>Current Status</label>
+                        <span id="product-status" style="color: var(--primary); font-weight: 700;">---</span>
+                    </div>
+                    <div class="info-item">
+                        <label>Last Verified</label>
+                        <span id="last-verified">Today</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Farmer Details -->
+            <section class="card">
+                <div class="card-header">
+                    <div class="card-icon"><i data-lucide="user"></i></div>
+                    <h2>Producer Profile</h2>
+                </div>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <label>Farmer Name</label>
+                        <span id="farmer-name">---</span>
+                    </div>
+                    <div class="info-item">
+                        <label>Producer ID</label>
+                        <span id="producer-id">---</span>
+                    </div>
+                    <div class="info-item">
+                        <label>Location</label>
+                        <span id="producer-location">---</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Supply Chain -->
+            <section class="card">
+                <div class="card-header">
+                    <div class="card-icon"><i data-lucide="calendar"></i></div>
+                    <h2>Supply Chain Timeline</h2>
+                </div>
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <div class="timeline-date" id="harvest-date">---</div>
+                        <div class="timeline-title">Harvesting & Quality Check</div>
+                        <div class="timeline-desc">Herb harvested and initial quality verification completed at source.</div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-date">-- -- ----</div>
+                        <div class="timeline-title">Blockchain Registration</div>
+                        <div class="timeline-desc">Digital twin created and anchored to immutable ledger.</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Photos -->
+            <section class="card">
+                <div class="card-header">
+                    <div class="card-icon"><i data-lucide="image"></i></div>
+                    <h2>Visual Evidence</h2>
+                </div>
+                <div class="image-gallery">
+                    <div class="image-placeholder">
+                        <i data-lucide="camera" style="width: 24px; opacity: 0.5;"></i>
+                        <span>No images uploaded</span>
+                    </div>
+                </div>
+            </section>
+
+            <a href="/static/index.html" class="btn-outline">
+                <i data-lucide="scan"></i> Scan Another Product
+            </a>
+        </div>
+    </div>
+
+    <script>
+        // Initialize Icons
+        lucide.createIcons();
+
+        async function fetchProduct() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const productId = urlParams.get('id');
+
+            if (!productId) {
+                showError("Missing Product ID", "No product ID was provided in the URL.");
+                return;
+            }
+
+            try {
+                // Determine API base URL - assuming same host as static files
+                // If running locally with different ports, this might need adjustment
+                const response = await fetch(`/api/products/${productId}`);
+                const data = await response.json();
+
+                if (data.success && data.product) {
+                    displayProduct(productId, data.product);
+                } else {
+                    showError("Product Not Found", data.message || "The requested product could not be found in our secure registry.");
+                }
+            } catch (err) {
+                console.error("Fetch error:", err);
+                showError("Connection Error", "Failed to connect to the AyurChain verification network.");
+            }
+        }
+
+        function displayProduct(id, product) {
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('product-content').style.display = 'block';
+
+            document.getElementById('display-id').textContent = id;
+            document.getElementById('herb-name').textContent = product.name || 'Unknown Herb';
+            document.getElementById('herb-description').textContent = product.description || 'No description provided.';
+            document.getElementById('product-status').textContent = product.status || 'Verified';
+            
+            document.getElementById('farmer-name').textContent = product.farmer_name || product.producer_name || 'Anonymous';
+            document.getElementById('producer-id').textContent = product.producer_id || 'N/A';
+            document.getElementById('producer-location').textContent = product.location || 'N/A';
+            
+            if (product.harvest_date) {
+                document.getElementById('harvest-date').textContent = product.harvest_date;
+            }
+
+            // Handle Images
+            const gallery = document.querySelector('.image-gallery');
+            if (product.images && product.images.length > 0) {
+                gallery.innerHTML = '';
+                product.images.forEach(imgUrl => {
+                    const img = document.createElement('img');
+                    img.src = imgUrl;
+                    img.style.width = '100%';
+                    img.style.borderRadius = '12px';
+                    img.style.border = '1px solid var(--card-border)';
+                    gallery.appendChild(img);
+                });
+            }
+
+            lucide.createIcons();
+        }
+
+        function showError(title, msg) {
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('product-content').style.display = 'none';
+            document.getElementById('error').style.display = 'block';
+            
+            document.getElementById('error-title').textContent = title;
+            document.getElementById('error-msg').textContent = msg;
+            
+            lucide.createIcons();
+        }
+
+        // Start fetch
+        fetchProduct();
+    </script>
+</body>
+</html>

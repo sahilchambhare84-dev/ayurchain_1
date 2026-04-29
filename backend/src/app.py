@@ -58,6 +58,7 @@ class Product(BaseModel):
     location: Optional[str] = ""
     harvest_date: Optional[str] = ""
     status: Optional[str] = "Verified"
+    images: Optional[list] = []
 
 # ───────── ROOT ─────────
 @app.get("/")
@@ -77,14 +78,16 @@ def add_product(product: Product):
         product_id = doc_ref.id
         doc_ref.set(data)
 
-        # QR content → link to product API
-        BASE_URL = "https://ayurchain-1.onrender.com"
-        qr_data = f"{BASE_URL}/static/index.html?id={product_id}"
+        # QR content → link to product verification page
+        # Using relative path for better compatibility or full URL if needed
+        # Requirement says: /static/product.html?id={id}
+        qr_data = f"/static/product.html?id={product_id}"
 
         qr_path = os.path.join(QR_DIR, f"{product_id}.png")
         qrcode.make(qr_data).save(qr_path)
 
         return {
+            "success": True,
             "message": "Product added successfully",
             "product_id": product_id,
             "qr_code": f"/qr/{product_id}"
@@ -95,17 +98,23 @@ def add_product(product: Product):
         raise HTTPException(status_code=500, detail=str(e))
 
 # ───────── GET PRODUCT ─────────
-@app.get("/product/{product_id}")
+@app.get("/api/products/{product_id}")
 def get_product(product_id: str):
     if not db:
-        raise HTTPException(status_code=500, detail="Firestore not initialized")
+        return {"success": False, "message": "Firestore not initialized"}
 
-    doc = db.collection("products").document(product_id).get()
+    try:
+        doc = db.collection("products").document(product_id).get()
 
-    if not doc.exists:
-        raise HTTPException(status_code=404, detail="Product not found")
+        if not doc.exists:
+            return {"success": False, "message": "Product not found"}
 
-    return doc.to_dict()
+        return {
+            "success": True,
+            "product": doc.to_dict()
+        }
+    except Exception as e:
+        return {"success": False, "message": str(e)}
 
 # ───────── GET QR ─────────
 @app.get("/qr/{product_id}")
