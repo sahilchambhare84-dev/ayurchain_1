@@ -1,4 +1,6 @@
 import os
+import json
+import tempfile
 import qrcode
 import firebase_admin
 from firebase_admin import credentials, firestore
@@ -21,20 +23,16 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Ensure folders exist BEFORE mounting
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-STATIC_DIR = os.path.join(BASE_DIR, "static")
-QR_DIR = os.path.join(STATIC_DIR, "qrcodes")
+# ── STATIC + QR DIRECTORY (FIXED FOR RENDER) ─────────────────────────
 
+# Use temp folder (safe on Render)
+QR_DIR = os.path.join(tempfile.gettempdir(), "qrcodes")
 os.makedirs(QR_DIR, exist_ok=True)
 
-# Mount static
+# Serve frontend files
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
 # ── FIREBASE SETUP ─────────────────────────
-
-import json
-import os
 
 SERVICE_ACCOUNT_PATH = "serviceAccountKey.json"
 
@@ -42,7 +40,7 @@ if os.path.exists(SERVICE_ACCOUNT_PATH):
     cred = credentials.Certificate(SERVICE_ACCOUNT_PATH)
     firebase_admin.initialize_app(cred)
     db = firestore.client()
-    print("Firebase initialized from serviceAccountKey.json")
+    print("Firebase initialized from file")
 elif os.getenv("FIREBASE_KEY"):
     firebase_data = json.loads(os.getenv("FIREBASE_KEY"))
     cred = credentials.Certificate(firebase_data)
@@ -50,7 +48,7 @@ elif os.getenv("FIREBASE_KEY"):
     db = firestore.client()
     print("Firebase initialized from environment variable")
 else:
-    print("Firebase key not found")
+    print("Firebase not configured")
     db = None
 
 # ── MODEL ─────────────────────────
@@ -74,27 +72,26 @@ def add_product(product: Product):
 
     data = product.model_dump()
 
+    # Create Firestore document
     doc_ref = db.collection("products").document()
     product_id = doc_ref.id
-
     doc_ref.set(data)
 
-    # QR LINK (IMPORTANT)
+    # Create QR link
     BASE_URL = "https://ayurchain-1.onrender.com"
     qr_data = f"{BASE_URL}/static/index.html?id={product_id}"
 
-    try:
-        qr_img = qrcode.make(qr_data)
-        qr_path = os.path.join(QR_DIR, f"{product_id}.png")
-        qr_img.save(qr_path)
-    except Exception as e:
-        print("QR generation error:", e)
-        qr_path = None
+    # Generate QR
+    qr_img = qrcode.make(qr_data)
+    qr_path = os.path.join(QR_DIR, f"{product_id}.png")
+    qr_img.save(qr_path)
+
+    print("QR saved at:", qr_path)
 
     return {
         "message": "Product added successfully",
         "product_id": product_id,
-        "qr_code": f"/static/qrcodes/{product_id}.png" if qr_path else None
+        "qr_code": f"/qr/{product_id}"
     }
 
 # ── GET PRODUCT ─────────────────────────
@@ -158,7 +155,3 @@ def get_qr(product_id: str):
 @app.get("/")
 def root():
     return FileResponse("static/index.html")
-
-if __name__ == "__main__":
-    import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000)
