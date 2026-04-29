@@ -33,13 +33,21 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 import json
 import os
 
-if os.getenv("FIREBASE_KEY"):
+SERVICE_ACCOUNT_PATH = "serviceAccountKey.json"
+
+if os.path.exists(SERVICE_ACCOUNT_PATH):
+    cred = credentials.Certificate(SERVICE_ACCOUNT_PATH)
+    firebase_admin.initialize_app(cred)
+    db = firestore.client()
+    print("Firebase initialized from serviceAccountKey.json")
+elif os.getenv("FIREBASE_KEY"):
     firebase_data = json.loads(os.getenv("FIREBASE_KEY"))
     cred = credentials.Certificate(firebase_data)
     firebase_admin.initialize_app(cred)
     db = firestore.client()
+    print("Firebase initialized from environment variable")
 else:
-    print("❌ Firebase key not found")
+    print("Firebase key not found")
     db = None
 
 # ── MODEL ─────────────────────────
@@ -69,7 +77,7 @@ def add_product(product: Product):
     doc_ref.set(data)
 
     # QR LINK (IMPORTANT)
-    qr_data = f"http://10.13.22.92:8000/static/index.html?id={product_id}"
+    qr_data = f"http://localhost:8000/static/index.html?id={product_id}"
 
     qr_img = qrcode.make(qr_data)
     qr_path = os.path.join(QR_DIR, f"{product_id}.png")
@@ -141,4 +149,8 @@ def get_qr(product_id: str):
 
 @app.get("/")
 def root():
-    return {"message": "API running", "docs": "/docs"}
+    return FileResponse("static/index.html")
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(app, host="0.0.0.0", port=8000)
