@@ -4,145 +4,771 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>AyurChain - Register</title>
+    <title>AyurChain | Register Product</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
 
     <style>
-        body {
+        :root {
+            --bg-dark: #05070a;
+            --card-bg: #0f1218;
+            --card-border: #1e2631;
+            --primary: #22c55e;
+            --primary-glow: rgba(34, 197, 94, 0.3);
+            --text-main: #e2e8f0;
+            --text-muted: #94a3b8;
+            --input-bg: #0a0d12;
+            --error: #ef4444;
+        }
+
+        * {
             margin: 0;
-            font-family: Arial, sans-serif;
-            background: #0b0f14;
-            color: #e6edf3;
+            padding: 0;
+            box-sizing: border-box;
         }
 
-        .container {
-            max-width: 800px;
-            margin: 60px auto;
-            padding: 20px;
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            line-height: 1.6;
+            overflow-x: hidden;
         }
 
-        h1 {
-            text-align: center;
-            margin-bottom: 30px;
+        /* Navbar */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 4rem;
+            background: rgba(5, 7, 10, 0.8);
+            backdrop-filter: blur(12px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid var(--card-border);
         }
 
-        .card {
-            background: #111827;
-            padding: 20px;
-            border-radius: 12px;
-            margin-bottom: 20px;
-            border: 1px solid #1f2937;
-        }
-
-        .card h3 {
-            margin-bottom: 15px;
-            color: #22c55e;
-        }
-
-        input,
-        textarea {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 10px;
-            border-radius: 8px;
-            border: 1px solid #374151;
-            background: #0b0f14;
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 700;
+            font-size: 1.25rem;
             color: white;
         }
 
-        input[type="date"] {
-            color: #ccc;
+        .logo span {
+            color: var(--primary);
         }
 
-        button {
-            width: 100%;
-            padding: 14px;
-            border-radius: 10px;
-            border: none;
-            background: #22c55e;
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-muted);
+            font-weight: 500;
+            transition: color 0.3s;
+            font-size: 0.9rem;
+        }
+
+        .nav-links a:hover {
+            color: white;
+        }
+
+        .btn-register-nav {
+            background: transparent;
+            color: var(--primary);
+            border: 1px solid var(--primary);
+            padding: 0.5rem 1.25rem;
+            border-radius: 99px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            box-shadow: 0 0 15px var(--primary-glow);
+            transition: all 0.3s;
+        }
+
+        .btn-register-nav:hover {
+            background: var(--primary);
             color: black;
-            font-weight: bold;
+        }
+
+        /* Hero */
+        .hero {
+            text-align: center;
+            padding: 4rem 1rem 2rem;
+        }
+
+        .breadcrumb {
+            color: var(--primary);
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .hero h1 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: white;
+        }
+
+        .hero p {
+            color: var(--text-muted);
+            max-width: 500px;
+            margin: 0 auto;
+            font-size: 0.95rem;
+        }
+
+        /* Container */
+        .container {
+            max-width: 720px;
+            margin: 0 auto;
+            padding-bottom: 6rem;
+        }
+
+        /* Card Sections */
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+
+        .card:hover {
+            border-color: #2d3748;
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .card-icon {
+            background: rgba(34, 197, 94, 0.1);
+            color: var(--primary);
+            padding: 0.5rem;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .card-header h2 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: white;
+        }
+
+        /* Form Controls */
+        .form-group {
+            margin-bottom: 1.25rem;
+            position: relative;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        label {
+            display: block;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.5rem;
+        }
+
+        label span.required {
+            color: var(--primary);
+            margin-left: 2px;
+        }
+
+        input,
+        textarea,
+        select {
+            width: 100%;
+            background: var(--input-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 8px;
+            padding: 0.75rem 1rem;
+            color: white;
+            font-family: inherit;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+        }
+
+        input:focus,
+        textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.1);
+        }
+
+        input::placeholder,
+        textarea::placeholder {
+            color: #4a5568;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        /* File Input */
+        .file-input-wrapper {
+            position: relative;
+            background: var(--input-bg);
+            border: 1px dashed var(--card-border);
+            border-radius: 8px;
+            padding: 0.75rem 1rem;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            transition: border-color 0.3s;
+        }
+
+        .file-input-wrapper:hover {
+            border-color: var(--primary);
+        }
+
+        .file-input-wrapper input[type="file"] {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
             cursor: pointer;
         }
 
-        button:hover {
-            background: #16a34a;
+        .file-label {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        /* Timeline Section */
+        .timeline-steps {
+            display: flex;
+            gap: 0.5rem;
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            margin-bottom: 1.5rem;
+            text-transform: uppercase;
+            font-weight: 500;
+        }
+
+        .timeline-steps span.active {
+            color: var(--primary);
+        }
+
+        .timeline-row {
+            display: grid;
+            grid-template-columns: 140px 1fr;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            align-items: center;
+        }
+
+        .timeline-label {
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+        }
+
+        /* Submit Button */
+        .btn-submit-container {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 1rem;
+        }
+
+        .btn-submit {
+            background: var(--primary);
+            color: black;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 99px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            cursor: pointer;
+            box-shadow: 0 0 25px var(--primary-glow);
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 35px rgba(34, 197, 94, 0.5);
+        }
+
+        .btn-submit:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Footer */
+        footer {
+            border-top: 1px solid var(--card-border);
+            padding: 3rem 4rem;
+            background: var(--bg-dark);
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .footer-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .footer-logo {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .footer-logo .logo-text {
+            font-family: 'Outfit', sans-serif;
+            font-weight: 700;
+            font-size: 1rem;
+            color: white;
+        }
+
+        .footer-logo .tagline {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+        }
+
+        .footer-mission {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            max-width: 400px;
+            text-align: center;
+        }
+
+        .footer-status {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.7rem;
+            color: var(--text-muted);
+        }
+
+        .status-dot {
+            width: 6px;
+            height: 6px;
+            background: var(--primary);
+            border-radius: 50%;
+            box-shadow: 0 0 8px var(--primary);
+        }
+
+        /* Validation Messages */
+        .error-message {
+            color: var(--error);
+            font-size: 0.7rem;
+            margin-top: 0.25rem;
+            display: none;
+        }
+
+        .input-error {
+            border-color: var(--error) !important;
+        }
+
+        /* Success Overlay */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+        }
+
+        .success-card {
+            background: var(--card-bg);
+            border: 1px solid var(--primary);
+            padding: 3rem;
+            border-radius: 24px;
+            text-align: center;
+            max-width: 400px;
+            box-shadow: 0 0 50px var(--primary-glow);
+        }
+
+        .success-card h2 {
+            color: white;
+            margin: 1rem 0;
+        }
+
+        .success-card p {
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            nav { padding: 1rem 2rem; }
+            .form-row { grid-template-columns: 1fr; }
+            .timeline-row { grid-template-columns: 1fr; }
+            footer { padding: 2rem; }
+            .footer-top { flex-direction: column; gap: 2rem; align-items: center; text-align: center; }
         }
     </style>
 </head>
 
 <body>
 
+    <nav>
+        <div class="logo">
+            <i data-lucide="leaf"></i>
+            AyurChain <span>v1.0</span>
+        </div>
+        <div class="nav-links">
+            <a href="#">Home</a>
+            <button class="btn-register-nav">Register</button>
+        </div>
+    </nav>
+
+    <div class="hero">
+        <span class="breadcrumb">/ Register</span>
+        <h1>Register a new product</h1>
+        <p>Enter herb, farmer, supply chain and photos. We'll generate a verifiable QR.</p>
+    </div>
+
     <div class="container">
-        <h1>Register a New Product</h1>
-
         <form id="productForm">
+            <!-- Herb Details -->
+            <section class="card">
+                <div class="card-header">
+                    <div class="card-icon"><i data-lucide="leaf"></i></div>
+                    <h2>Herb Details</h2>
+                </div>
+                <div class="form-group">
+                    <label>Herb Name <span class="required">*</span></label>
+                    <input type="text" id="name" placeholder="e.g. Ashwagandha" required>
+                    <div class="error-message" id="error-name">Please enter the herb name.</div>
+                </div>
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea id="description" placeholder="Variety, qualities, intended use..."></textarea>
+                </div>
+            </section>
 
-            <!-- Herb -->
-            <div class="card">
-                <h3>Herb Details</h3>
-                <input id="name" placeholder="e.g Ashwagandha" required />
-                <textarea id="description" placeholder="Description..."></textarea>
+            <!-- Farmer Identity Card -->
+            <section class="card">
+                <div class="card-header">
+                    <div class="card-icon"><i data-lucide="user"></i></div>
+                    <h2>Farmer Identity Card</h2>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Full Name <span class="required">*</span></label>
+                        <input type="text" id="producer_name" placeholder="Farmer's full name" required>
+                        <div class="error-message" id="error-producer_name">Please enter the producer name.</div>
+                    </div>
+                    <div class="form-group">
+                        <label>Farmer ID Number <span class="required">*</span></label>
+                        <input type="text" id="producer_id" placeholder="e.g. KCC-2024-1234" required>
+                        <div class="error-message" id="error-producer_id">Please enter the producer ID.</div>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Location <span class="required">*</span></label>
+                        <input type="text" id="location" placeholder="Village, District, State" required>
+                        <div class="error-message" id="error-location">Please enter the location.</div>
+                    </div>
+                    <div class="form-group">
+                        <label>Phone</label>
+                        <input type="text" id="phone" placeholder="Contact number">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>About the Farmer</label>
+                    <textarea id="about" placeholder="Bio or experience details..." style="min-height: 80px;"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Farmer Photo</label>
+                    <div class="file-input-wrapper">
+                        <i data-lucide="upload" style="width: 16px; margin-right: 0.5rem; color: var(--text-muted);"></i>
+                        <span class="file-label">Choose File No file chosen</span>
+                        <input type="file" id="farmer_photo">
+                    </div>
+                </div>
+            </section>
+
+            <!-- Supply Chain Timeline -->
+            <section class="card">
+                <div class="card-header">
+                    <div class="card-icon"><i data-lucide="calendar"></i></div>
+                    <h2>Supply Chain Timeline</h2>
+                </div>
+                <div class="timeline-steps">
+                    <span class="active">Harvest</span> → <span>Processing</span> → <span>Packaging</span> → <span>Delivered</span>
+                </div>
+
+                <div class="timeline-row">
+                    <div class="timeline-label">Harvest Date <span class="required">*</span></div>
+                    <div class="form-row">
+                        <input type="date" id="harvest_date" required>
+                        <input type="text" id="harvest_note" placeholder="Notes about harvest">
+                    </div>
+                </div>
+                <div class="error-message" id="error-harvest_date" style="margin-left: 150px; margin-bottom: 1rem;">Please select a harvest date.</div>
+
+                <div class="timeline-row">
+                    <div class="timeline-label">Processing Date</div>
+                    <div class="form-row">
+                        <input type="date" id="processing_date">
+                        <input type="text" id="processing_note" placeholder="Notes about processing">
+                    </div>
+                </div>
+
+                <div class="timeline-row">
+                    <div class="timeline-label">Packaging Date</div>
+                    <div class="form-row">
+                        <input type="date" id="packaging_date">
+                        <input type="text" id="packaging_note" placeholder="Notes about packaging">
+                    </div>
+                </div>
+
+                <div class="timeline-row">
+                    <div class="timeline-label">Delivery Date</div>
+                    <div class="form-row">
+                        <input type="date" id="delivery_date">
+                        <input type="text" id="delivery_note" placeholder="Notes about delivery">
+                    </div>
+                </div>
+            </section>
+
+            <!-- Product Photos -->
+            <section class="card">
+                <div class="card-header">
+                    <div class="card-icon"><i data-lucide="image"></i></div>
+                    <h2>Product Photos</h2>
+                </div>
+                <div class="form-group">
+                    <div class="file-input-wrapper">
+                        <i data-lucide="upload" style="width: 16px; margin-right: 0.5rem; color: var(--text-muted);"></i>
+                        <span class="file-label">Choose Files No file chosen</span>
+                        <input type="file" id="product_photos" multiple>
+                    </div>
+                </div>
+            </section>
+
+            <div class="btn-submit-container">
+                <button type="submit" class="btn-submit" id="submitBtn">
+                    Generate QR & Publish
+                </button>
             </div>
-
-            <!-- Farmer -->
-            <div class="card">
-                <h3>Farmer Identity</h3>
-                <input id="producer_name" placeholder="Producer Name" required />
-                <input id="producer_id" placeholder="Producer ID" required />
-                <input id="farmer_name" placeholder="Farmer Name" />
-                <input id="location" placeholder="Location" />
-            </div>
-
-            <!-- Timeline -->
-            <div class="card">
-                <h3>Supply Chain</h3>
-                <input type="date" id="harvest_date" />
-            </div>
-
-            <button type="submit">Generate QR & Publish</button>
-
         </form>
     </div>
 
+    <footer>
+        <div class="footer-top">
+            <div class="footer-logo">
+                <div class="logo-text">AyurChain</div>
+                <div class="tagline">trace . trust . verify</div>
+            </div>
+            <div class="footer-mission">
+                Verifiable Ayurvedic herb traceability — from soil to shelf, signed and sealed.
+            </div>
+            <div class="footer-status">
+                <div class="status-dot"></div>
+                © 2024 · operational
+            </div>
+        </div>
+    </footer>
+
+    <!-- Success Overlay -->
+    <div class="overlay" id="successOverlay">
+        <div class="success-card">
+            <div class="card-icon" style="width: 60px; height: 60px; margin: 0 auto; border-radius: 50%;">
+                <i data-lucide="check-circle" style="width: 32px; height: 32px;"></i>
+            </div>
+            <h2>Registration Successful</h2>
+            <p>Your product has been securely recorded on AyurChain. Redirecting to your verifiable QR code...</p>
+            <div class="status-dot" style="margin: 0 auto; animation: pulse 1.5s infinite;"></div>
+        </div>
+    </div>
+
+    <style>
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.5); opacity: 0.5; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+    </style>
+
     <script>
-        document.getElementById("productForm").addEventListener("submit", async (e) => {
+        // Initialize Icons
+        lucide.createIcons();
+
+        // Handle File Input Labels
+        document.querySelectorAll('input[type="file"]').forEach(input => {
+            input.addEventListener('change', e => {
+                const label = e.target.parentElement.querySelector('.file-label');
+                if (e.target.files.length > 0) {
+                    label.textContent = e.target.files.length > 1 
+                        ? `${e.target.files.length} files selected` 
+                        : e.target.files[0].name;
+                    label.style.color = 'white';
+                } else {
+                    label.textContent = 'Choose File No file chosen';
+                    label.style.color = 'var(--text-muted)';
+                }
+            });
+        });
+
+        const form = document.getElementById('productForm');
+        const submitBtn = document.getElementById('submitBtn');
+        const overlay = document.getElementById('successOverlay');
+
+        form.addEventListener('submit', async (e) => {
             e.preventDefault();
+            
+            // Custom Validation
+            let isValid = true;
+            const requiredFields = [
+                { id: 'name', errorId: 'error-name' },
+                { id: 'producer_name', errorId: 'error-producer_name' },
+                { id: 'producer_id', errorId: 'error-producer_id' },
+                { id: 'location', errorId: 'error-location' },
+                { id: 'harvest_date', errorId: 'error-harvest_date' }
+            ];
+
+            requiredFields.forEach(field => {
+                const input = document.getElementById(field.id);
+                const error = document.getElementById(field.errorId);
+                if (!input.value.trim()) {
+                    input.classList.add('input-error');
+                    error.style.display = 'block';
+                    isValid = false;
+                } else {
+                    input.classList.remove('input-error');
+                    error.style.display = 'none';
+                }
+            });
+
+            if (!isValid) {
+                window.scrollTo({ top: document.querySelector('.input-error').offsetTop - 100, behavior: 'smooth' });
+                return;
+            }
+
+            // Disable button
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i data-lucide="loader-2" class="animate-spin"></i> Processing...';
+            lucide.createIcons();
+
+            // Prepare Data
+            // We combine extra fields into description to avoid changing API structure
+            const baseDescription = document.getElementById('description').value;
+            const phone = document.getElementById('phone').value;
+            const about = document.getElementById('about').value;
+            const procDate = document.getElementById('processing_date').value;
+            const packDate = document.getElementById('packaging_date').value;
+            const delDate = document.getElementById('delivery_date').value;
+            
+            let fullDescription = baseDescription;
+            if (phone || about || procDate) {
+                fullDescription += "\n\n--- Additional Details ---";
+                if (phone) fullDescription += `\nPhone: ${phone}`;
+                if (about) fullDescription += `\nAbout Farmer: ${about}`;
+                if (procDate) fullDescription += `\nProcessing: ${procDate}`;
+                if (packDate) fullDescription += `\nPackaging: ${packDate}`;
+                if (delDate) fullDescription += `\nDelivery: ${delDate}`;
+            }
 
             const data = {
-                name: document.getElementById("name").value,
-                description: document.getElementById("description").value,
-                producer_name: document.getElementById("producer_name").value,
-                producer_id: document.getElementById("producer_id").value,
-                farmer_name: document.getElementById("farmer_name").value,
-                location: document.getElementById("location").value,
-                harvest_date: document.getElementById("harvest_date").value,
+                name: document.getElementById('name').value,
+                description: fullDescription,
+                producer_name: document.getElementById('producer_name').value,
+                producer_id: document.getElementById('producer_id').value,
+                farmer_name: document.getElementById('producer_name').value, // Map to same as producer_name
+                location: document.getElementById('location').value,
+                harvest_date: document.getElementById('harvest_date').value,
                 status: "Verified"
             };
 
             try {
-                const res = await fetch("https://ayurchain-1.onrender.com/add-product", {
-                    method: "POST",
+                const response = await fetch('https://ayurchain-1.onrender.com/add-product', {
+                    method: 'POST',
                     headers: {
-                        "Content-Type": "application/json"
+                        'Content-Type': 'application/json'
                     },
                     body: JSON.stringify(data)
                 });
 
-                const result = await res.json();
+                const result = await response.json();
 
-                if (res.ok) {
-                    alert("✅ Product Created");
-                    window.open("https://ayurchain-1.onrender.com" + result.qr_code);
+                if (response.ok) {
+                    // Show success UI
+                    overlay.style.display = 'flex';
+                    setTimeout(() => {
+                        window.open("https://ayurchain-1.onrender.com" + result.qr_code, "_self");
+                    }, 2000);
                 } else {
-                    alert("❌ " + result.detail);
+                    alert("❌ Error: " + (result.detail || "Failed to create product"));
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = 'Generate QR & Publish';
                 }
-
-            } catch (err) {
-                alert("❌ Server error");
-                console.error(err);
+            } catch (error) {
+                console.error('Error:', error);
+                alert("❌ Connection Error: Could not reach the server.");
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Generate QR & Publish';
             }
         });
+
+        // Remove error styling on input
+        document.querySelectorAll('input, textarea').forEach(input => {
+            input.addEventListener('input', () => {
+                input.classList.remove('input-error');
+                const errorId = `error-${input.id}`;
+                const errorElement = document.getElementById(errorId);
+                if (errorElement) errorElement.style.display = 'none';
+            });
+        });
     </script>
+
+    <style>
+        .animate-spin {
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+    </style>
 
 </body>
 
